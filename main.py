@@ -28,20 +28,63 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            
+            ##não funciona
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                carta_escolhida = mover(x)
+                carta_escolhida[0].left, carta_escolhida[0].top = pygame.mouse.get_pos()
+            elif event.type == pygame.MOUSEBUTTONUP:
+                carta_escolhida[0].left = carta_escolhida[1][0]
+                carta_escolhida[0].top = carta_escolhida[1][1]
 
         # Background Stuff
         screen.fill(bg_color)
         pygame.draw.rect(screen, accent_color, deck)
+        x = cards(screen, screen_width, screen_height) ##8 cartas [0-7]
         pygame.draw.rect(screen, (19, 161, 36), floor)
         
-        #cartas
-        cards(screen, screen_width, screen_height)
+        #castle stuff
         castle1(screen)
         castle2(screen)
 
         # Rendering
         pygame.display.flip()
         clock.tick(60)
+
+#########Não funciona
+def mover(x):
+    pos_mouse = pygame.mouse.get_pos()
+    ##carta1
+    if pos_mouse[1] > 545 and pos_mouse[1] < 695:
+        if pos_mouse[0] > 50 and pos_mouse[0] < 180:
+            posicao_inicial = [50,545]
+            return x[0],posicao_inicial
+        elif pos_mouse[0] > 200 and pos_mouse[0] < 330:
+            posicao_inicial = [200,545]
+            return x[1], posicao_inicial
+        elif pos_mouse[0] > 350 and pos_mouse[0] < 480:
+            posicao_inicial = [350,545]
+            return x[2], posicao_inicial
+        elif pos_mouse[0] > 500 and pos_mouse[0] < 630:
+            posicao_inicial = [500,545]
+            return x[3], posicao_inicial
+        elif pos_mouse[0] > 650 and pos_mouse[0] < 780:
+            posicao_inicial = [650,545]
+            return x[4], posicao_inicial
+        elif pos_mouse[0] > 800 and pos_mouse[0] < 630:
+            posicao_inicial = [800,545]
+            return x[5], posicao_inicial
+        elif pos_mouse[0] > 950 and pos_mouse[0] < 1074:
+            posicao_inicial = [950,545]
+            return x[6], posicao_inicial
+        elif pos_mouse[0] > 1100 and pos_mouse[0] < 1224:
+            posicao_inicial = [1100,545]
+            return x[7], posicao_inicial
+        else:
+            return
+    else: 
+        return
+
 
 def cards(screen, screen_width, screen_height):
     cards_color = (125, 128, 125)
@@ -65,6 +108,7 @@ def cards(screen, screen_width, screen_height):
     screen.blit(ship7, (950,545))
     ship8 = pygame.image.load("B_back.png")
     screen.blit(ship8, (1100,545))
+    return card1,card2,card3,card4,card5,card6,ship7,ship8
 
 def castle1(screen):
     castle1 = pygame.Rect(100, 295, 200,200)
