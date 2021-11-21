@@ -1,8 +1,11 @@
 import pygame
 import sys
+import typing
 
 from pygame.constants import SYSTEM_CURSOR_WAITARROW
 from pygame.draw import line
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from carta import Carta
 
 
 def main():
@@ -12,35 +15,47 @@ def main():
     clock = pygame.time.Clock()
 
     # Setting up the main window
-    screen_width = 1300
-    screen_height = 700
-    screen = pygame.display.set_mode((screen_width, screen_height))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption('Castle Wars')
 
     # Global variables
     bg_color = (173, 203, 222)
     accent_color = (15, 97, 20)
-    deck = pygame.Rect(0,535,screen_width, screen_height/4)
-    floor = pygame.Rect(0,495,screen_width, 40)
-    
+    deck = pygame.Rect(0,535,SCREEN_WIDTH, SCREEN_HEIGHT/4)
+    floor = pygame.Rect(0,495,SCREEN_WIDTH, 40)
+
+    cartas = cria_cartas_usuario()
+    carta_selecionada: Carta = None
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             
-            ##não funciona
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                carta_escolhida = mover(x)
-                carta_escolhida[0].left, carta_escolhida[0].top = pygame.mouse.get_pos()
+                # Se o mouse está clicado seleciona a carta que colidiu o evento.
+                for carta in cartas:
+                    if carta.collidepoint(event.pos):
+                        carta_selecionada = carta
             elif event.type == pygame.MOUSEBUTTONUP:
-                carta_escolhida[0].left = carta_escolhida[1][0]
-                carta_escolhida[0].top = carta_escolhida[1][1]
+                # Botão do mouse foi solto desceleciona a carta e deixa-a parada.
+                carta_selecionada.x = carta_selecionada.posicao_inicial[0]
+                carta_selecionada.y = carta_selecionada.posicao_inicial[1]
+                carta_selecionada = None
+            elif event.type == pygame.MOUSEMOTION:
+                # No movimento do mouse "arrasta" a carta junto.
+                if carta_selecionada is not None:
+                    botao_esquerdo_pressionado = event.buttons[0]
+                    if botao_esquerdo_pressionado:
+                        print(event)
+                        carta_selecionada.x = event.pos[0]
+                        carta_selecionada.y = event.pos[1]
 
         # Background Stuff
         screen.fill(bg_color)
         pygame.draw.rect(screen, accent_color, deck)
-        x = cards(screen, screen_width, screen_height) ##8 cartas [0-7]
+        for carta in cartas:
+            carta.draw(screen)
         pygame.draw.rect(screen, (19, 161, 36), floor)
         
         #castle stuff
@@ -51,64 +66,10 @@ def main():
         pygame.display.flip()
         clock.tick(60)
 
-#########Não funciona
-def mover(x):
-    pos_mouse = pygame.mouse.get_pos()
-    ##carta1
-    if pos_mouse[1] > 545 and pos_mouse[1] < 695:
-        if pos_mouse[0] > 50 and pos_mouse[0] < 180:
-            posicao_inicial = [50,545]
-            return x[0],posicao_inicial
-        elif pos_mouse[0] > 200 and pos_mouse[0] < 330:
-            posicao_inicial = [200,545]
-            return x[1], posicao_inicial
-        elif pos_mouse[0] > 350 and pos_mouse[0] < 480:
-            posicao_inicial = [350,545]
-            return x[2], posicao_inicial
-        elif pos_mouse[0] > 500 and pos_mouse[0] < 630:
-            posicao_inicial = [500,545]
-            return x[3], posicao_inicial
-        elif pos_mouse[0] > 650 and pos_mouse[0] < 780:
-            posicao_inicial = [650,545]
-            return x[4], posicao_inicial
-        elif pos_mouse[0] > 800 and pos_mouse[0] < 630:
-            posicao_inicial = [800,545]
-            return x[5], posicao_inicial
-        elif pos_mouse[0] > 950 and pos_mouse[0] < 1074:
-            posicao_inicial = [950,545]
-            return x[6], posicao_inicial
-        elif pos_mouse[0] > 1100 and pos_mouse[0] < 1224:
-            posicao_inicial = [1100,545]
-            return x[7], posicao_inicial
-        else:
-            return
-    else: 
-        return
-
-
-def cards(screen, screen_width, screen_height):
-    cards_color = (125, 128, 125)
-    card1 = pygame.Rect(50,545,screen_width/10, screen_height/4 - 25)
-    card2 = pygame.Rect(200,545,screen_width/10, screen_height/4 - 25)
-    card3 = pygame.Rect(350,545,screen_width/10, screen_height/4 - 25)
-    card4 = pygame.Rect(500,545,screen_width/10, screen_height/4 - 25)
-    card5 = pygame.Rect(650,545,screen_width/10, screen_height/4 - 25)
-    card6 = pygame.Rect(800,545,screen_width/10, screen_height/4 - 25)
-    '''card7 = pygame.Rect(950,545,screen_width/10, screen_height/4 - 25)
-    card8 = pygame.Rect(1100,545,screen_width/10, screen_height/4 - 25)'''
-    pygame.draw.rect(screen, cards_color, card1)
-    pygame.draw.rect(screen, cards_color, card2)
-    pygame.draw.rect(screen, cards_color, card3)
-    pygame.draw.rect(screen, cards_color, card4)
-    pygame.draw.rect(screen, cards_color, card5)
-    pygame.draw.rect(screen, cards_color, card6)
-    '''pygame.draw.rect(screen, cards_color, card7)
-    pygame.draw.rect(screen, cards_color, card8)'''
-    ship7 = pygame.image.load("G_back.png")
-    screen.blit(ship7, (950,545))
-    ship8 = pygame.image.load("B_back.png")
-    screen.blit(ship8, (1100,545))
-    return card1,card2,card3,card4,card5,card6,ship7,ship8
+def cria_cartas_usuario() -> typing.List[Carta]:
+    initial_left = 50
+    TOP = 545
+    return [Carta('', 0, '', (i*150)+initial_left, TOP) for i in range(8)]
 
 def castle1(screen):
     castle1 = pygame.Rect(100, 295, 200,200)
