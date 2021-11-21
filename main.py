@@ -21,7 +21,7 @@ def main():
     # Global variables
     bg_color = (173, 203, 222)
     accent_color = (15, 97, 20)
-    text_color = (200, 200, 100)
+    text_color = (38, 40, 41)
     deck = pygame.Rect(0, 535, SCREEN_WIDTH, SCREEN_HEIGHT / 4)
     floor = pygame.Rect(0, 495, SCREEN_WIDTH, 40)
 
@@ -69,8 +69,6 @@ def main():
         # Background Stuff
         screen.fill(bg_color)
         pygame.draw.rect(screen, accent_color, deck)
-        for carta in cartas:
-            carta.draw(screen)
         pygame.draw.rect(screen, (19, 161, 36), floor)
         zona_jogo = font.render("Zona de Jogo", False, text_color)
         zona_descarte = font.render("Zona de Descarte", False, text_color)
@@ -81,6 +79,8 @@ def main():
         castle1(screen)
         castle2(screen)
 
+        for carta in cartas:
+            carta.draw(screen)
         # Rendering
         pygame.display.flip()
         clock.tick(60)
