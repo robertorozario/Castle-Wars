@@ -5,12 +5,12 @@ from constants import COLOR_BLUE, COLOR_RED, SCREEN_WIDTH
 class Castelo:
 
     def __init__(self, color, tower_color, color_fill):
-        self._nivel = 0
+        self._nivel = 1
         self._nivel_do_muro = 0
         self._jogador = None
-        self._construtores = 0
-        self._magos = 0
-        self._soldados = 0
+        self._construtores = 2
+        self._magos = 2
+        self._soldados = 2
         self._tijolos = 0
         self._espadas = 0
         self._cristais = 0
