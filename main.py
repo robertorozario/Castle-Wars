@@ -103,11 +103,28 @@ def main():
 
         # Highlight the create deck button if mouse hover over it.
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        if SCREEN_WIDTH/2-texto.get_width() <= mouse_x <= SCREEN_WIDTH/2+texto.get_width() and 32 <= mouse_y <= 96:
+        if SCREEN_WIDTH/2-texto.get_width() <= mouse_x <= SCREEN_WIDTH/2+texto.get_width() and 32 <= mouse_y <= 32+64:
             pygame.draw.rect(screen, (105, 105, 105), cria_deck_btn)
         else:
             pygame.draw.rect(screen, (211, 211, 211),cria_deck_btn)
         screen.blit(texto, rect_texto)
+
+        passa_turno_texto = font.render('Passar Turno' , False , TEXT_COLOR)
+        rect_passa_turno_texto = passa_turno_texto.get_rect(center=(SCREEN_WIDTH/2, 130))
+        passar_turno_btn = pygame.Rect(
+            SCREEN_WIDTH/2-passa_turno_texto.get_width(),
+            98,
+            passa_turno_texto.get_width()*2,
+            64,
+        )
+
+        # Highlight do botão de passar turno quando o mouse estiver sobre ele.
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        if SCREEN_WIDTH/2-texto.get_width() <= mouse_x <= SCREEN_WIDTH/2+texto.get_width() and 98 <= mouse_y <= 98+64:
+            pygame.draw.rect(screen, (105, 105, 105), passar_turno_btn)
+        else:
+            pygame.draw.rect(screen, (211, 211, 211),passar_turno_btn)
+        screen.blit(passa_turno_texto, rect_passa_turno_texto)
 
         # Desenha castelos na tela.
         castelo_azul.draw(screen)
