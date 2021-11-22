@@ -18,6 +18,12 @@ from carta import Carta
 from castelo import Castelo
 
 
+# Global variables
+BG_COLOR = (173, 203, 222)
+ACCENT_COLOR = (15, 97, 20)
+TEXT_COLOR = (38, 40, 41)
+FLOOR_COLOR = (19, 161, 36)
+
 def main():
     # General Setup
     pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -28,14 +34,10 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption('Castle Wars')
 
-    # Global variables
-    bg_color = (173, 203, 222)
-    accent_color = (15, 97, 20)
-    text_color = (38, 40, 41)
     deck = pygame.Rect(0, 535, SCREEN_WIDTH, SCREEN_HEIGHT / 4)
     floor = pygame.Rect(0, 495, SCREEN_WIDTH, 40)
 
-    # Texto
+    # Fonte de texto
     font = pygame.font.Font("freesansbold.ttf", 20)
 
     cartas = cria_cartas_usuario()
@@ -75,18 +77,20 @@ def main():
                 if carta_selecionada is not None:
                     botao_esquerdo_pressionado = event.buttons[0]
                     if botao_esquerdo_pressionado:
-                        print(event)
                         carta_selecionada.x = event.pos[0]
                         carta_selecionada.y = event.pos[1]
 
         # Background Stuff
-        screen.fill(bg_color)
-        pygame.draw.rect(screen, accent_color, deck)
-        pygame.draw.rect(screen, (19, 161, 36), floor)
-        zona_jogo = font.render("Zona de Jogo", False, text_color)
-        zona_descarte = font.render("Zona de Descarte", False, text_color)
-        screen.blit(zona_jogo, (200, 100))
-        screen.blit(zona_descarte, (SCREEN_WIDTH - 350, 100))
+        screen.fill(BG_COLOR)
+
+        # Desenha zonas de arraste das cartas.
+        desenha_zona_de_jogo(screen, font)
+        desenha_zona_de_descarte(screen, font)
+
+        # Desenha espaço de deck e chão.
+        pygame.draw.rect(screen, ACCENT_COLOR, deck)
+        pygame.draw.rect(screen, FLOOR_COLOR, floor)
+
 
         # Desenha castelos na tela.
         castelo_azul.draw(screen)
@@ -105,6 +109,16 @@ def cria_cartas_usuario() -> typing.List[Carta]:
     initial_left = 50
     TOP = 545
     return [Carta('', 0, '', (i * 150) + initial_left, TOP) for i in range(8)]
+
+
+def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
+    texto = font.render("Zona de Descarte", False, TEXT_COLOR)
+    screen.blit(texto, (SCREEN_WIDTH - 350, 100))
+
+
+def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
+    texto = font.render("Zona de Jogo", False, TEXT_COLOR)
+    screen.blit(texto, (200, 100))
 
 
 if __name__ == "__main__":
