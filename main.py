@@ -91,6 +91,23 @@ def main():
         pygame.draw.rect(screen, ACCENT_COLOR, deck)
         pygame.draw.rect(screen, FLOOR_COLOR, floor)
 
+        # Desenha botão que irá direcionar para criação do deck.
+        texto = font.render('Criar Deck' , False , TEXT_COLOR)
+        rect_texto = texto.get_rect(center=(SCREEN_WIDTH/2, 64))
+        cria_deck_btn = pygame.Rect(
+            SCREEN_WIDTH/2-texto.get_width(),
+            32,
+            texto.get_width()*2,
+            64,
+        )
+
+        # Highlight the create deck button if mouse hover over it.
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        if SCREEN_WIDTH/2-texto.get_width() <= mouse_x <= SCREEN_WIDTH/2+texto.get_width() and 32 <= mouse_y <= 96:
+            pygame.draw.rect(screen, (105, 105, 105), cria_deck_btn)
+        else:
+            pygame.draw.rect(screen, (211, 211, 211),cria_deck_btn)
+        screen.blit(texto, rect_texto)
 
         # Desenha castelos na tela.
         castelo_azul.draw(screen)
