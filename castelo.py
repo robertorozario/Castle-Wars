@@ -1,6 +1,6 @@
 import pygame
 
-from constants import COLOR_BLUE, COLOR_RED
+from constants import COLOR_BLUE, COLOR_RED, SCREEN_WIDTH
 
 class Castelo:
 
@@ -24,9 +24,9 @@ class Castelo:
 
     def draw(self, screen: pygame.Surface):
         # Desenha retângulo do castelo.
-        left = 1000
+        left = 900
         if self._color == COLOR_BLUE:
-            left = 100
+            left = 200
         pygame.draw.rect(
             screen,
             self._color_fill,
@@ -42,11 +42,11 @@ class Castelo:
             )
 
         # Desenha os tijolos do castelo.
-        odd_row_left = 1020
-        even_row_left = 1040
+        odd_row_left = 920
+        even_row_left = 940
         if self._color == COLOR_BLUE:
-            odd_row_left = 120
-            even_row_left = 140
+            odd_row_left = 220
+            even_row_left = 240
         for i in range(5):
             pygame.draw.rect(
                 screen,
@@ -100,12 +100,47 @@ class Castelo:
             )
 
         # Desenha as torres do castelo.
-        tower_left = 990
+        tower_left = 890
         if self._color == COLOR_BLUE:
-            tower_left = 90
+            tower_left = 190
         for i in range(4):
             pygame.draw.rect(
                 screen,
                 self._tower_color,
                 pygame.Rect(tower_left+(60*i), 280, 40, 40),
             )
+
+    def draw_info(self, screen: pygame.Surface):
+        info = {
+            'Nível': str(self._nivel),
+            'Nível Muro': str(self._nivel_do_muro),
+            'Construtores': str(self._construtores),
+            'Magos': str(self._magos),
+            'Soldados': str(self._soldados),
+            'Tijolos': str(self._tijolos),
+            'Espadas': str(self._espadas),
+            'Cristais': str(self._cristais),
+            'Tijolos Mágicos': 'ON' if self._escudo_magico_buff else 'OFF',
+            'Proteção de Recursos': 'ON' if self._protecao_de_recursos_buff else 'OFF',
+            'Espadas Mágicas': 'ON' if self._espadas_magicas_buff else 'OFF',
+            'Escudo Mágico': 'ON' if self._escudo_magico_buff else 'OFF',
+        }
+        
+        font = pygame.font.Font("freesansbold.ttf", 12)
+        textos = []
+        for key, val in info.items():
+            texto = font.render(key + ': ' + val, False, (0, 0, 0))
+            textos.append(texto)
+
+        maior_width_textos = 0
+        for texto in textos:
+            if texto.get_width() > maior_width_textos:
+                maior_width_textos = texto.get_width()
+        
+        left = 32
+        if self._color == COLOR_RED:
+            left = SCREEN_WIDTH - maior_width_textos - 32
+        
+        top = 32
+        for i in range(len(textos)):
+            screen.blit(textos[i], (left, top + (i*16)))

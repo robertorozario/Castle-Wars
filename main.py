@@ -111,7 +111,9 @@ def main():
 
         # Desenha castelos na tela.
         castelo_azul.draw(screen)
+        castelo_azul.draw_info(screen)
         castelo_vermelho.draw(screen)
+        castelo_vermelho.draw_info(screen)
 
         # Desenha as cartas da mão do usuário.
         for carta in cartas:
@@ -130,12 +132,12 @@ def cria_cartas_usuario() -> typing.List[Carta]:
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
     texto = font.render("Zona de Descarte", False, TEXT_COLOR)
-    screen.blit(texto, (SCREEN_WIDTH - 350, 100))
+    screen.blit(texto, (SCREEN_WIDTH - 480, 100))
 
 
 def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     texto = font.render("Zona de Jogo", False, TEXT_COLOR)
-    screen.blit(texto, (200, 100))
+    screen.blit(texto, (350, 100))
 
 
 if __name__ == "__main__":
