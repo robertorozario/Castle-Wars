@@ -45,7 +45,13 @@ def main():
 
     castelo_azul = Castelo(COLOR_BLUE, COLOR_BLUE_TOWER, COLOR_FILL_BLUE)
     castelo_vermelho = Castelo(COLOR_RED, COLOR_RED_TOWER, COLOR_FILL_RED)
+
+    #Variável para ligar tela de passar turno
+    pass_turn = False
+
     while True:
+        # Posição mouse
+        mouse_x, mouse_y = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -61,8 +67,8 @@ def main():
                 if carta_selecionada is not None:
                     """ 
                     Rects não tem função pra deletar pelo que eu achei, entã só move cartas pra fora da tela
-                    e as condições para as cartas serem deletadas não leva em consideração em qual daz zonas
-                    ela se encontra, apensa se está acima da área da mão, elaborar isso na versão final
+                    e as condições para as cartas serem deletadas não leva em consideração em qual das zonas
+                    ela se encontra, apenas se está acima da área da mão, elaborar isso na versão final
                     """
                     if carta_selecionada.y < (SCREEN_HEIGHT - ((SCREEN_HEIGHT / 4) + 40)):
                         carta_selecionada.x = -200
@@ -72,6 +78,10 @@ def main():
                         carta_selecionada.x = carta_selecionada.posicao_inicial[0]
                         carta_selecionada.y = carta_selecionada.posicao_inicial[1]
                         carta_selecionada = None
+                elif SCREEN_WIDTH/2-103 <= mouse_x <= SCREEN_WIDTH/2+103 and 98 <= mouse_y <= 98+64:
+                    pass_turn = True
+                else:
+                    pass_turn = False
             elif event.type == pygame.MOUSEMOTION:
                 # No movimento do mouse "arrasta" a carta junto.
                 if carta_selecionada is not None:
@@ -102,7 +112,6 @@ def main():
         )
 
         # Highlight the create deck button if mouse hover over it.
-        mouse_x, mouse_y = pygame.mouse.get_pos()
         if SCREEN_WIDTH/2-texto.get_width() <= mouse_x <= SCREEN_WIDTH/2+texto.get_width() and 32 <= mouse_y <= 32+64:
             pygame.draw.rect(screen, (105, 105, 105), cria_deck_btn)
         else:
@@ -135,6 +144,13 @@ def main():
         # Desenha as cartas da mão do usuário.
         for carta in cartas:
             carta.draw(screen)
+
+        #Desenha tela de passar turno
+        if pass_turn:
+            screen.fill(BG_COLOR)
+            pts_text = font.render('Passe a Vez, Clique Para Continuar' , False , TEXT_COLOR)
+            rect_pts_text = pts_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+            screen.blit(pts_text, rect_pts_text)
 
         # Rendering
         pygame.display.flip()
