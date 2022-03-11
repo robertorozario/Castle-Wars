@@ -1,6 +1,6 @@
 import pygame
 
-from constants import COLOR_BLUE, COLOR_RED, SCREEN_WIDTH
+from constants import *
 from jogador import Jogador
 from carta import Carta
 
@@ -8,7 +8,7 @@ class Castelo:
 
     def __init__(self, jogador: Jogador, color, tower_color, color_fill):
         self.__nivel = 0
-        self.__jogador: Jogador = None
+        self.__jogador: Jogador = jogador
         self.__construtores = 0
         self.__magos = 0
         self.__soldados = 0
@@ -19,6 +19,48 @@ class Castelo:
         self.__color = color
         self.__tower_color = tower_color
         self.__color_fill = color_fill
+
+    @staticmethod
+    def vermelho(jogador: Jogador) -> Castelo:
+        """Cria um castelo da cor vermelha recebendo o Jogador dono dele.
+
+        Parameters
+        ----------
+        jogador : Jogador
+            O jogador dono do castelo.
+        
+        Returns
+        -------
+        Castelo
+            o castelo vermelho criado.
+        """
+
+        return Castelo(
+            jogador=jogador,
+            color=COLOR_RED,
+            fill_color=COLOR_FILL_RED,
+            tower_color=COLOR_RED_TOWER)
+
+    @staticmethod
+    def azul(jogador: Jogador) -> Castelo:
+        """Cria um castelo da cor azul recebendo o Jogador dono dele.
+
+        Parameters
+        ----------
+        jogador : Jogador
+            O jogador dono do castelo.
+        
+        Returns
+        -------
+        Castelo
+            o castelo azul criado.
+        """
+
+        return Castelo(
+            jogador=jogador,
+            color=COLOR_BLUE,
+            fill_color=COLOR_FILL_BLUE,
+            tower_color=COLOR_BLUE_TOWER)
 
     @property
     def nivel(self) -> int:
@@ -89,20 +131,35 @@ class Castelo:
         self.__escudo_magico_buff = valor
 
     def possui_recurso_pra_carta(self, carta: Carta) -> bool:
+        """Verifica se o Castelo possui recursos para jogar a carta.
+
+        Parameters
+        ----------
+        carta : Carta
+            A carta para verificar quantidade de recursos do Castelo.
+
+        Returns
+        -------
+        bool
+            se o Castelo possui recursos para jogar a carta.
+        """
+
         possui_cristais = self.__cristais >= carta.cristais
         possui_tijolos = self.__tijolos >= carta.tijolos
         possui_espadas = self.__espadas >= carta.espadas
         return possui_cristais and possui_tijolos and possui_espadas
 
-    def atualiza_estado_castelo(self):
-        pass
-
     def aplica_configuracao_inicial(self):
+        """Aplica a configuração inicial, ou seja, de início de jogo ao Castelo.
+        """
+
         self.__nivel = 30
         self.__magos, self.__construtores, self.__soldados = 2
         self.__cristais, self.__espadas, self.__tijolos = 5
 
     def adicionar_recursos(self):
+        """Adiciona os recursos de troca de turno ao Castelo."""
+
         self.__tijolos += self.__construtores
         self.__cristais += self.__magos
         self.__espadas += self.__soldados
@@ -225,3 +282,14 @@ class Castelo:
         top = 32
         for i in range(len(textos)):
             screen.blit(textos[i], (left, top + (i*16)))
+
+    def reset(self):
+        """Reinicia os atributos do Castelo para o mesmo estado de instanciação."""
+        self.__nivel = 0
+        self.__construtores = 0
+        self.__magos = 0
+        self.__soldados = 0
+        self.__tijolos = 0
+        self.__espadas = 0
+        self.__cristais = 0
+        self.__escudo_magico_buff = False
