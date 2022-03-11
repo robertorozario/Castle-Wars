@@ -112,7 +112,7 @@ class Jogador:
         bool
             indicação se descartou o máximo de cartas.
         """
-        return self.__cartas_descartadas_no_turno is 3
+        return self.__cartas_descartadas_no_turno == 3
 
     def jogar_carta(self, indice: int):
         """Joga uma carta da mão do Jogador, mesmo que descartar, remove da mão.

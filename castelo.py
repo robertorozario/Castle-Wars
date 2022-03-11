@@ -21,7 +21,7 @@ class Castelo:
         self.__color_fill = color_fill
 
     @staticmethod
-    def vermelho(jogador: Jogador) -> Castelo:
+    def vermelho(cls, jogador: Jogador):
         """Cria um castelo da cor vermelha recebendo o Jogador dono dele.
 
         Parameters
@@ -35,14 +35,14 @@ class Castelo:
             o castelo vermelho criado.
         """
 
-        return Castelo(
+        return cls(
             jogador=jogador,
             color=COLOR_RED,
-            fill_color=COLOR_FILL_RED,
+            color_fill=COLOR_FILL_RED,
             tower_color=COLOR_RED_TOWER)
 
     @staticmethod
-    def azul(jogador: Jogador) -> Castelo:
+    def azul(cls, jogador: Jogador):
         """Cria um castelo da cor azul recebendo o Jogador dono dele.
 
         Parameters
@@ -56,10 +56,10 @@ class Castelo:
             o castelo azul criado.
         """
 
-        return Castelo(
+        return cls(
             jogador=jogador,
             color=COLOR_BLUE,
-            fill_color=COLOR_FILL_BLUE,
+            color_fill=COLOR_FILL_BLUE,
             tower_color=COLOR_BLUE_TOWER)
 
     @property

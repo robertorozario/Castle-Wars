@@ -14,7 +14,8 @@ from constants import (
     COLOR_FILL_BLUE,
     COLOR_FILL_RED,
 )
-from carta import Carta
+from carta import Carta, AcaoCarta
+from jogador import Jogador
 from castelo import Castelo
 
 
@@ -43,8 +44,8 @@ def main():
     cartas = cria_cartas_usuario()
     carta_selecionada: Carta = None
 
-    castelo_azul = Castelo(COLOR_BLUE, COLOR_BLUE_TOWER, COLOR_FILL_BLUE)
-    castelo_vermelho = Castelo(COLOR_RED, COLOR_RED_TOWER, COLOR_FILL_RED)
+    castelo_azul = Castelo.azul(Castelo, jogador=Jogador())
+    castelo_vermelho = Castelo.vermelho(Castelo, jogador=Jogador())
 
     #Variável para ligar tela de passar turno
     pass_turn = False
@@ -160,7 +161,7 @@ def main():
 def cria_cartas_usuario() -> typing.List[Carta]:
     initial_left = 50
     TOP = 545
-    return [Carta('', 0, '', (i * 150) + initial_left, TOP) for i in range(8)]
+    return [Carta(acao=AcaoCarta, left=(i * 150) + initial_left, top=TOP, espadas=0, cristais=0, tijolos=0) for i in range(8)]
 
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):

@@ -1,7 +1,6 @@
 from typing import List
 
 from carta import *
-from jogador import Jogador
 
 TAMANHO_MAXIMO = 280
 
@@ -83,7 +82,7 @@ class Baralho:
                 cont += 1
         return cont
 
-    def copia(self) -> Baralho:
+    def copia(self):
         """Faz uma cópia exato do baralho no estado atual.
 
         Returns
@@ -91,4 +90,4 @@ class Baralho:
         Baralho
             uma cópia exata do Baralho atual.
         """
-        return Baralho(cartas=self.__cartas)
+        return self.__init__(cartas=self.__cartas)
