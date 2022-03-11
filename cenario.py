@@ -2,6 +2,7 @@ import pygame
 
 from typing import List
 
+from carta import Carta, AcaoCarta
 from baralho import Baralho
 from castelo import Castelo
 from jogador import Jogador
@@ -66,7 +67,41 @@ class Cenario:
         pass
 
     def efetua_acao_da_carta(self, carta: Carta, castelo_jogador: Castelo):
-        pass
+        castelo_adversario = self.__castelo_vermelho
+        if castelo_jogador is self.__castelo_vermelho:
+            castelo_adversario = self.__castelo_azul
+
+        if carta.acao is AcaoCarta.TOWER:
+            # Aumenta 10 níveis do castelo.
+            castelo_jogador.nivel(castelo_jogador.nivel+10)
+        elif carta.acao is FIRE_ARCHER:
+            # Causa 5 de dano ao adversário.
+            castelo_adversario.nivel(castelo_adversario.nivel-5)
+        elif carta.acao is KNIGHT:
+            # Causa 12 de dano ao adversário.
+            castelo_adversario.nivel(castelo_adversario.nivel-12)
+        elif carta.acao is RECRUIT:
+            # Aumenta 1 soldado.
+            castelo_jogador.soldados(castelo_jogador.soldados+1)
+        elif carta.acao is BUILDER:
+            # Aumenta 1 construtor.
+            castelo_jogador.construtores(castelo_jogador.construtores+1)
+        elif carta.acao is TAVERN:
+            # Aumenta 15 níveis do castelo.
+            castelo_jogador.nivel(castelo_jogador.nivel+15)
+        elif carta.acao is MAGE:
+            # Adiciona 1 mago.
+            castelo_jogador.magos(castelo_jogador.magos+1)
+        elif carta.acao is ADD_BRICK:
+            # Gera 8 tijolos.
+            castelo_jogador.tijolos(castelo_jogador.tijolos+8)
+        elif carta.acao is ADD_WEAPON:
+            # Gera 8 espadas.
+            castelo_jogador.espadas(castelo_jogador.espadas+8)
+        elif carta.acao is MAGIC_DEFENSE:
+            # Ativa o buff de magic defense, ativa uma barreira que protege o
+            # próximo ataque.
+            castelo_jogador.escudo_magico_buff(True)
 
     def atualiza_estado_jogo(self, acao: str, castelo_jogador: Castelo):
         pass

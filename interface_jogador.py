@@ -10,7 +10,7 @@ class InterfaceJogador:
         self.__jogador = jogador
         self.__cenario = cenario
 
-    def descarta_carta(indice: int):
+    def descartar_carta(indice: int):
         pass
 
     def iniciar_jogo(self):
