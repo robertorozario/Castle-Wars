@@ -10,10 +10,10 @@ from jogador import Jogador
 class Cenario:
 
     def __init__(self):
-        self.__castelo_azul = Castelo('azul', 'azul', 'azul')
-        self.__castelo_vermelho = Castelo('vermelho', 'vermelho', 'vermelho')
         self.__jogador_vermelho = Jogador()
         self.__jogador_azul = Jogador()
+        self.__castelo_azul = Castelo.azul(self.__jogador_azul)
+        self.__castelo_vermelho = Castelo.vermelho(self.__jogador_vermelho)
         self.__partida_em_andamento = False
         self.__baralhos_padrao: List[Baralho] = []
         self.__jogador_em_turno: Jogador = None
@@ -64,74 +64,119 @@ class Cenario:
         return self.__jogador_em_turno_pronto
 
     def obtem_castelo_jogador(self, jogador: Jogador) -> Castelo:
-        pass
+        """Dado um Jogador obtem o castelo associado a ele.
+
+        Parameters
+        ----------
+        jogador : Jogador
+            O jogador para buscar o Castelo.
+    
+        Returns
+        -------
+        Castelo
+            o castelo do jogador.
+        """
+
+        if jogador is self.__jogador_azul:
+            return self.__castelo_azul
+        return self.__castelo_vermelho
 
     def efetua_acao_da_carta(self, carta: Carta, castelo_jogador: Castelo):
+        """Efetua a ação de uma carta dependendo do tipo de ação realizando uma
+        mudança no castelo adversário ou no castelo do Jogador.
+
+        Parameters
+        ----------
+        carta : Carta
+            A carta para efetuar a ação.
+        castelo_jogador : Castelo
+            O castelo do jogador realizando a ação da carta.
+        """
+
         castelo_adversario = self.__castelo_vermelho
         if castelo_jogador is self.__castelo_vermelho:
             castelo_adversario = self.__castelo_azul
 
         if carta.acao is AcaoCarta.TOWER:
             # Aumenta 10 níveis do castelo.
-            castelo_jogador.nivel(castelo_jogador.nivel+10)
+            castelo_jogador.nivel += 10
         elif carta.acao is FIRE_ARCHER:
             # Causa 5 de dano ao adversário.
-            castelo_adversario.nivel(castelo_adversario.nivel-5)
+            castelo_adversario.nivel -= 5
         elif carta.acao is KNIGHT:
             # Causa 12 de dano ao adversário.
-            castelo_adversario.nivel(castelo_adversario.nivel-12)
+            castelo_adversario.nivel -= 12
         elif carta.acao is RECRUIT:
             # Aumenta 1 soldado.
-            castelo_jogador.soldados(castelo_jogador.soldados+1)
+            castelo_jogador.soldados += 1
         elif carta.acao is BUILDER:
             # Aumenta 1 construtor.
-            castelo_jogador.construtores(castelo_jogador.construtores+1)
+            castelo_jogador.construtores += 1
         elif carta.acao is TAVERN:
             # Aumenta 15 níveis do castelo.
-            castelo_jogador.nivel(castelo_jogador.nivel+15)
+            castelo_jogador.nivel += 15
         elif carta.acao is MAGE:
             # Adiciona 1 mago.
-            castelo_jogador.magos(castelo_jogador.magos+1)
+            castelo_jogador.magos += 1
         elif carta.acao is ADD_BRICK:
             # Gera 8 tijolos.
-            castelo_jogador.tijolos(castelo_jogador.tijolos+8)
+            castelo_jogador.tijolos += 8
         elif carta.acao is ADD_WEAPON:
             # Gera 8 espadas.
-            castelo_jogador.espadas(castelo_jogador.espadas+8)
+            castelo_jogador.espadas += 8
         elif carta.acao is MAGIC_DEFENSE:
             # Ativa o buff de magic defense, ativa uma barreira que protege o
             # próximo ataque.
-            castelo_jogador.escudo_magico_buff(True)
-
-    def atualiza_estado_jogo(self, acao: str, castelo_jogador: Castelo):
-        pass
-
-    def passar_turno(self):
-        pass
-
-    def passar_turno(self, jogador: Jogador):
-        pass
+            castelo_jogador.escudo_magico_buff = True
 
     def passa_turno_atual_jogador(self):
-        pass
+        """Passa o turno do atual jogador em turno."""
+
+        jogador_em_turno_eh_vermelho = self.__jogador_em_turno is self.__jogador_vermelho
+        if jogador_em_turno_eh_vermelho:
+            self.__jogador_em_turno = self.__jogador_azul
+            self.__jogador_vermelho.em_turno = False
+            self.__castelo_vermelho.adicionar_recursos()
+        else:
+            self.__jogador_em_turno = self.__jogador_vermelho
+            self.__jogador_azul.em_turno = False
+            self.__castelo_azul.adicionar_recursos()
+        self.__jogador_em_turno_pronto = False
 
     def anuncia_vencedor(self):
         pass
 
     def finaliza_partida(self):
-        pass
+        """Finaliza a partida permitindo iniciar uma nova partida."""
+
+        self.__jogador_azul.reset()
+        self.__jogador_vermelho.reset()
+        self.__castelo_azul.reset()
+        self.__castelo_vermelho.reset()
+    
+        self.__partida_em_andamento = False
+        self.__jogador_em_turno = None
+        self.__jogador_em_turno_pronto = False
 
     def iniciar_jogo(self):
-        pass
+        """Inicia o jogo se os jogadores estiverem prontos."""
+
+        if self.jogadores_estao_prontos():
+            self.__partida_em_andamento = True
 
     def jogadores_estao_prontos(self) -> bool:
-        pass
-
-    def salva_baralho(self, jogador: Jogador):
-        pass
+        """Verifica se ambos jogadores estão prontos para começar partida."""
+        return self.__jogador_azul.pronto and self.__jogador_vermelho.pronto
 
     def avalia_encerramento_partida(self):
-        pass
+        """Avalia o encerramento da partida verificando se existe um castelo
+        e jogador vencedor.
+        """
+
+        if self.__castelo_vermelho.nivel is 100 or self.__castelo_azul.nivel is 0:
+            self.__jogador_vermelho.vencedor = True
+        elif self.__castelo_azul.nivel is 100 or self.__castelo_vermelho.nivel is 0:
+            self.__jogador_azul.vencedor = True
 
     def notifica_vencedor(self):
         pass

@@ -123,3 +123,13 @@ class Jogador:
             O índice da carta na mão para jogar.
         """
         self.__mao.pop(indice)
+
+    def reset(self):
+        """Reinicia os atributos do Jogador para o mesmo estado de instanciação."""
+
+        self.__vencedor = False
+        self.__baralho = None
+        self.__mao = []
+        self.__em_turno = False
+        self.__pronto = False
+        self.__cartas_descartadas_no_turno = 0
