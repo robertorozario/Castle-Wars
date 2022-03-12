@@ -22,6 +22,45 @@ class JanelaDeJogo:
         self.__cenario = cenario
         self.__loop = False
 
+    """
+    def inicia_selecao_baralho(self):
+        self.__cenario = Cenario
+        self.__loop =  True
+        pygame.mixer.pre_init(44100, -16, 2, 512)
+        pygame.init()
+        clock = pygame.time.Clock()
+        screen = self.__screen
+        pygame.display.set_caption("Seleção do baralho")
+
+        while self.__loop:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.inicia_loop_jogo()
+
+            opcao1 = pygame.Rect(40, 50, SCREEN_WIDTH/2.5, SCREEN_HEIGHT/4)
+            opcao2 = pygame.Rect(40, 420, SCREEN_WIDTH/2.5, SCREEN_HEIGHT/4)
+            opcao3 = pygame.Rect(720, 50, SCREEN_WIDTH/2.5, SCREEN_HEIGHT/4)
+            opcao4 = pygame.Rect(720, 420, SCREEN_WIDTH/2.5, SCREEN_HEIGHT/4)
+            font = pygame.font.Font("freesansbold.ttf", 40)
+
+            screen.fill(BG_COLOR)
+
+            pygame.draw.rect(screen, [0,0,0], opcao1)
+            pygame.draw.rect(screen, [0,0,0], opcao2)
+            pygame.draw.rect(screen, [0,0,0], opcao3)
+            pygame.draw.rect(screen, [0,0,0], opcao4)
+
+            texto = font.render("Selecione seu baralho", False, TEXT_COLOR)
+            screen.blit(texto, (400, 300))
+
+            pygame.display.flip()
+            clock.tick(60)
+    """
+
     def inicia_loop_jogo(self):
         self.__loop = True
 
