@@ -21,6 +21,8 @@ class JanelaDeJogo:
         self.__screen = screen
         self.__cenario = cenario
         self.__loop = False
+        self.__carta_selecionada: Carta = None
+        self.__pass_turn = False
 
     def inicia_loop_jogo(self):
         self.__loop = True
@@ -40,65 +42,13 @@ class JanelaDeJogo:
         font = pygame.font.Font("freesansbold.ttf", 20)
 
         cartas = cria_cartas_usuario()
-        carta_selecionada: Carta = None
 
         castelo_azul = self.__cenario.castelo_azul
         castelo_vermelho = self.__cenario.castelo_vermelho
 
-        # Variável para ligar tela de passar turno
-        pass_turn = False
-
         while self.__loop:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    # Se o mouse está clicado seleciona a carta que colidiu o
-                    # evento.
-                    for carta in cartas:
-                        if carta.collidepoint(event.pos):
-                            carta_selecionada = carta
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    # Botão do mouse foi solto desceleciona a carta e deixa-a
-                    # parada.
-                    if carta_selecionada is not None:
-                        """
-                        Rects não tem função pra deletar pelo que eu achei,
-                        então só move cartas pra fora da tela e as condições
-                        para as cartas serem deletadas não leva em consideração
-                        em qual das zonas ela se encontra, apenas se está acima
-                        da área da mão, elaborar isso na versão final
-                        """
-                        if carta_selecionada.y < (
-                            SCREEN_HEIGHT - ((SCREEN_HEIGHT / 4) + 40)
-                        ):
-                            carta_selecionada.x = -200
-                            carta_selecionada.y = 0
-                            carta_selecionada = None
-                        else:
-                            carta_x = carta_selecionada.posicao_inicial[0]
-                            carta_y = carta_selecionada.posicao_inicial[1]
-                            carta_selecionada.x = carta_x
-                            carta_selecionada.y = carta_y
-                            carta_selecionada = None
-                    elif (
-                        SCREEN_WIDTH / 2 - 103 <= mouse_x
-                        and mouse_x <= SCREEN_WIDTH / 2 + 103
-                        and 98 <= mouse_y <= 98 + 64
-                    ):
-                        pass_turn = True
-                    else:
-                        pass_turn = False
-                elif event.type == pygame.MOUSEMOTION:
-                    # No movimento do mouse "arrasta" a carta junto.
-                    if carta_selecionada is not None:
-                        botao_esquerdo_pressionado = event.buttons[0]
-                        if botao_esquerdo_pressionado:
-                            carta_selecionada.x = event.pos[0]
-                            carta_selecionada.y = event.pos[1]
+            self.ouve_eventos(cartas)
 
             # Background Stuff
             screen.fill(BG_COLOR)
@@ -169,7 +119,7 @@ class JanelaDeJogo:
                 carta.draw(screen)
 
             # Desenha tela de passar turno
-            if pass_turn:
+            if self.__pass_turn:
                 screen.fill(BG_COLOR)
                 pts_text = font.render(
                     "Passe a Vez, Clique Para Continuar", False, TEXT_COLOR
@@ -183,8 +133,57 @@ class JanelaDeJogo:
             pygame.display.flip()
             clock.tick(60)
 
-    def ouve_eventos(self):
-        pass
+    def ouve_eventos(self, cartas: typing.List[Carta]):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Se o mouse está clicado seleciona a carta que colidiu o
+                # evento.
+                for carta in cartas:
+                    if carta.collidepoint(event.pos):
+                        self.__carta_selecionada = carta
+            elif event.type == pygame.MOUSEBUTTONUP:
+                # Botão do mouse foi solto desceleciona a carta e deixa-a
+                # parada.
+                if self.__carta_selecionada is not None:
+                    """
+                    Rects não tem função pra deletar pelo que eu achei,
+                    então só move cartas pra fora da tela e as condições
+                    para as cartas serem deletadas não leva em consideração
+                    em qual das zonas ela se encontra, apenas se está acima
+                    da área da mão, elaborar isso na versão final
+                    """
+                    if self.__carta_selecionada.y < (
+                        SCREEN_HEIGHT - ((SCREEN_HEIGHT / 4) + 40)
+                    ):
+                        self.__carta_selecionada.x = -200
+                        self.__carta_selecionada.y = 0
+                        self.__carta_selecionada = None
+                    else:
+                        carta_x = self.__carta_selecionada.posicao_inicial[0]
+                        carta_y = self.__carta_selecionada.posicao_inicial[1]
+                        self.__carta_selecionada.x = carta_x
+                        self.__carta_selecionada.y = carta_y
+                        self.__carta_selecionada = None
+                elif (
+                    SCREEN_WIDTH / 2 - 103 <= mouse_x
+                    and mouse_x <= SCREEN_WIDTH / 2 + 103
+                    and 98 <= mouse_y <= 98 + 64
+                ):
+                    self.__pass_turn = True
+                else:
+                    self.__pass_turn = False
+            elif event.type == pygame.MOUSEMOTION:
+                # No movimento do mouse "arrasta" a carta junto.
+                if self.__carta_selecionada is not None:
+                    botao_esquerdo_pressionado = event.buttons[0]
+                    if botao_esquerdo_pressionado:
+                        self.__carta_selecionada.x = event.pos[0]
+                        self.__carta_selecionada.y = event.pos[1]
 
 
 def cria_cartas_usuario() -> typing.List[Carta]:
