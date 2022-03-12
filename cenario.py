@@ -216,9 +216,6 @@ class Cenario:
         ):
             self.__jogador_azul.vencedor = True
 
-    def notifica_vencedor(self):
-        pass
-
     def draw(self, surface: pygame.Surface):
         pass
 
