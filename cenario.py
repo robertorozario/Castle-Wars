@@ -2,7 +2,19 @@ import pygame
 
 from typing import List
 
-from carta import Carta, AcaoCarta
+from carta import (
+    Carta,
+    AcaoCarta,
+    CartaAddBrick,
+    CartaAddWeapon,
+    CartaBuilder,
+    CartaFireArcher,
+    CartaKnight,
+    CartaMage,
+    CartaMagicDefense,
+    CartaRecruit,
+    CartaTower,
+)
 from baralho import Baralho
 from castelo import Castelo
 from jogador import Jogador
@@ -15,10 +27,25 @@ class Cenario:
         self.__castelo_azul = Castelo.azul(Castelo, self.__jogador_azul)
         self.__castelo_vermelho = Castelo.vermelho(
             Castelo,
-            self.__jogador_vermelho
+            self.__jogador_vermelho,
         )
         self.__partida_em_andamento = False
-        self.__baralhos_padrao: List[Baralho] = []
+        self.__baralhos_padrao: List[Baralho] = [
+            Baralho(
+                cartas=[CartaTower() for _ in range(5)]
+                + [CartaAddBrick() for _ in range(5)]
+                + [CartaMage() for _ in range(5)]
+                + [CartaRecruit() for _ in range(5)]
+                + [CartaFireArcher() for _ in range(5)]
+            ),
+            Baralho(
+                cartas=[CartaAddBrick() for _ in range(5)]
+                + [CartaKnight() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(5)]
+                + [CartaBuilder() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)]
+            ),
+        ]
         self.__jogador_em_turno: Jogador = None
         self.__jogador_em_turno_pronto: bool = False
 
