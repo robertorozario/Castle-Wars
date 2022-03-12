@@ -1,8 +1,17 @@
 import pygame
 
-from constants import *
+from constants import (
+    COLOR_BLUE,
+    COLOR_FILL_BLUE,
+    COLOR_BLUE_TOWER,
+    COLOR_FILL_RED,
+    COLOR_RED,
+    COLOR_RED_TOWER,
+    SCREEN_WIDTH,
+)
 from jogador import Jogador
 from carta import Carta
+
 
 class Castelo:
 
@@ -28,7 +37,7 @@ class Castelo:
         ----------
         jogador : Jogador
             O jogador dono do castelo.
-        
+
         Returns
         -------
         Castelo
@@ -49,7 +58,7 @@ class Castelo:
         ----------
         jogador : Jogador
             O jogador dono do castelo.
-        
+
         Returns
         -------
         Castelo
@@ -77,15 +86,15 @@ class Castelo:
     @property
     def construtores(self) -> int:
         return self.__construtores
-    
+
     @construtores.setter
     def construtores(self, construtores: int):
         self.__construtores = construtores
-    
+
     @property
     def magos(self) -> int:
         return self.__magos
-    
+
     @magos.setter
     def magos(self, magos: int):
         self.__magos = magos
@@ -93,27 +102,27 @@ class Castelo:
     @property
     def soldados(self) -> int:
         return self.__soldados
-    
+
     @soldados.setter
     def soldados(self, soldados: int):
         self.__soldados = soldados
-    
+
     @property
     def tijolos(self) -> int:
         return self.__tijolos
-    
+
     @tijolos.setter
     def tijolos(self, tijolos: int):
         self.__tijolos = tijolos
-        
+
     @property
     def espadas(self) -> int:
         return self.__espadas
-    
+
     @espadas.setter
     def espadas(self, espadas: int):
         self.__espadas = espadas
-    
+
     @property
     def cristais(self) -> int:
         return self.__cristais
@@ -121,11 +130,11 @@ class Castelo:
     @cristais.setter
     def cristais(self, cristais: int):
         self.__cristais = cristais
-    
+
     @property
     def escudo_magico_buff(self) -> bool:
         return self.__escudo_magico_buff
-    
+
     @escudo_magico_buff.setter
     def escudo_magico_buff(self, valor: bool):
         self.__escudo_magico_buff = valor
@@ -263,7 +272,7 @@ class Castelo:
             'Cristais': str(self.__cristais),
             'Escudo Mágico': 'ON' if self.__escudo_magico_buff else 'OFF',
         }
-        
+
         font = pygame.font.Font("freesansbold.ttf", 12)
         textos = []
         for key, val in info.items():
@@ -274,17 +283,19 @@ class Castelo:
         for texto in textos:
             if texto.get_width() > maior_width_textos:
                 maior_width_textos = texto.get_width()
-        
+
         left = 32
         if self.__color == COLOR_RED:
             left = SCREEN_WIDTH - maior_width_textos - 32
-        
+
         top = 32
         for i in range(len(textos)):
             screen.blit(textos[i], (left, top + (i*16)))
 
     def reset(self):
-        """Reinicia os atributos do Castelo para o mesmo estado de instanciação."""
+        """Reinicia os atributos do Castelo para o mesmo estado de
+        instanciação.
+        """
         self.__nivel = 0
         self.__construtores = 0
         self.__magos = 0

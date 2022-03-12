@@ -7,8 +7,8 @@ from baralho import Baralho
 from castelo import Castelo
 from jogador import Jogador
 
-class Cenario:
 
+class Cenario:
     def __init__(self):
         self.__jogador_vermelho = Jogador()
         self.__jogador_azul = Jogador()
@@ -22,11 +22,11 @@ class Cenario:
     @property
     def castelo_azul(self) -> Castelo:
         return self.__castelo_azul
-    
+
     @property
     def castelo_vermelho(self) -> Castelo:
         return self.__castelo_vermelho
-    
+
     @property
     def jogador_vermelho(self) -> Jogador:
         return self.__jogador_vermelho
@@ -38,7 +38,7 @@ class Cenario:
     @property
     def partida_em_andamento(self) -> bool:
         return self.__partida_em_andamento
-    
+
     @partida_em_andamento.setter
     def partida_em_andamento(self, partida_em_andamento: bool):
         self.__partida_em_andamento = partida_em_andamento
@@ -46,19 +46,19 @@ class Cenario:
     @property
     def baralhos_padrao(self) -> List[Baralho]:
         return self.__baralhos_padrao
-    
+
     @property
     def jogador_em_turno(self) -> Jogador:
         return self.__jogador_em_turno
-    
+
     @jogador_em_turno.setter
     def jogador_em_turno(self, jogador_em_turno: Jogador):
         self.__jogador_em_turno = jogador_em_turno
-    
+
     @property
     def jogador_em_turno_pronto(self) -> bool:
         return self.__jogador_em_turno_pronto
-    
+
     @jogador_em_turno_pronto.setter
     def jogador_em_turno_pronto(self, jogador_em_turno_pronto: bool):
         return self.__jogador_em_turno_pronto
@@ -70,7 +70,7 @@ class Cenario:
         ----------
         jogador : Jogador
             O jogador para buscar o Castelo.
-    
+
         Returns
         -------
         Castelo
@@ -100,31 +100,31 @@ class Cenario:
         if carta.acao is AcaoCarta.TOWER:
             # Aumenta 10 níveis do castelo.
             castelo_jogador.nivel += 10
-        elif carta.acao is FIRE_ARCHER:
+        elif carta.acao is AcaoCarta.FIRE_ARCHER:
             # Causa 5 de dano ao adversário.
             castelo_adversario.nivel -= 5
-        elif carta.acao is KNIGHT:
+        elif carta.acao is AcaoCarta.KNIGHT:
             # Causa 12 de dano ao adversário.
             castelo_adversario.nivel -= 12
-        elif carta.acao is RECRUIT:
+        elif carta.acao is AcaoCarta.RECRUIT:
             # Aumenta 1 soldado.
             castelo_jogador.soldados += 1
-        elif carta.acao is BUILDER:
+        elif carta.acao is AcaoCarta.BUILDER:
             # Aumenta 1 construtor.
             castelo_jogador.construtores += 1
-        elif carta.acao is TAVERN:
+        elif carta.acao is AcaoCarta.TAVERN:
             # Aumenta 15 níveis do castelo.
             castelo_jogador.nivel += 15
-        elif carta.acao is MAGE:
+        elif carta.acao is AcaoCarta.MAGE:
             # Adiciona 1 mago.
             castelo_jogador.magos += 1
-        elif carta.acao is ADD_BRICK:
+        elif carta.acao is AcaoCarta.ADD_BRICK:
             # Gera 8 tijolos.
             castelo_jogador.tijolos += 8
-        elif carta.acao is ADD_WEAPON:
+        elif carta.acao is AcaoCarta.ADD_WEAPON:
             # Gera 8 espadas.
             castelo_jogador.espadas += 8
-        elif carta.acao is MAGIC_DEFENSE:
+        elif carta.acao is AcaoCarta.MAGIC_DEFENSE:
             # Ativa o buff de magic defense, ativa uma barreira que protege o
             # próximo ataque.
             castelo_jogador.escudo_magico_buff = True
@@ -132,7 +132,9 @@ class Cenario:
     def passa_turno_atual_jogador(self):
         """Passa o turno do atual jogador em turno."""
 
-        jogador_em_turno_eh_vermelho = self.__jogador_em_turno is self.__jogador_vermelho
+        jogador_em_turno_eh_vermelho = (
+            self.__jogador_em_turno is self.__jogador_vermelho
+        )
         if jogador_em_turno_eh_vermelho:
             self.__jogador_em_turno = self.__jogador_azul
             self.__jogador_vermelho.em_turno = False
@@ -153,7 +155,7 @@ class Cenario:
         self.__jogador_vermelho.reset()
         self.__castelo_azul.reset()
         self.__castelo_vermelho.reset()
-    
+
         self.__partida_em_andamento = False
         self.__jogador_em_turno = None
         self.__jogador_em_turno_pronto = False
@@ -173,9 +175,15 @@ class Cenario:
         e jogador vencedor.
         """
 
-        if self.__castelo_vermelho.nivel is 100 or self.__castelo_azul.nivel is 0:
+        if (
+            self.__castelo_vermelho.nivel == 100
+            or self.__castelo_azul.nivel == 0
+        ):
             self.__jogador_vermelho.vencedor = True
-        elif self.__castelo_azul.nivel is 100 or self.__castelo_vermelho.nivel is 0:
+        elif (
+            self.__castelo_azul.nivel == 100 or
+            self.__castelo_vermelho.nivel == 0
+        ):
             self.__jogador_azul.vencedor = True
 
     def notifica_vencedor(self):

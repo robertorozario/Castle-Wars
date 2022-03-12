@@ -3,6 +3,7 @@ from typing import List
 from baralho import Baralho
 from carta import Carta
 
+
 class Jogador:
     """
     Classe de representação do Jogador no CastleWars.
@@ -42,11 +43,11 @@ class Jogador:
     @property
     def vencedor(self) -> bool:
         return self.__vencedor
-    
+
     @vencedor.setter
     def vencedor(self, vencedor: bool):
         self.__vencedor = vencedor
-    
+
     @property
     def baralho(self) -> Baralho:
         return self.__baralho
@@ -62,11 +63,11 @@ class Jogador:
     @mao.setter
     def mao(self, mao: List[Carta]):
         self.__mao = mao
-    
+
     @property
     def pronto(self) -> bool:
         return self.__pronto
-    
+
     @pronto.setter
     def pronto(self, pronto: bool):
         self.__pronto = pronto
@@ -96,7 +97,7 @@ class Jogador:
         ----------
         indice : int
             O índice da carta na mão a obter informação.
-        
+
         Returns
         -------
         Carta
@@ -125,7 +126,9 @@ class Jogador:
         self.__mao.pop(indice)
 
     def reset(self):
-        """Reinicia os atributos do Jogador para o mesmo estado de instanciação."""
+        """Reinicia os atributos do Jogador para o mesmo estado de
+        instanciação.
+        """
 
         self.__vencedor = False
         self.__baralho = None

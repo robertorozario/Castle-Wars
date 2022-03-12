@@ -1,8 +1,22 @@
 from typing import List
 
-from carta import *
+from carta import (
+    AcaoCarta,
+    Carta,
+    CartaAddBrick,
+    CartaAddWeapon,
+    CartaBuilder,
+    CartaFireArcher,
+    CartaKnight,
+    CartaMage,
+    CartaMagicDefense,
+    CartaRecruit,
+    CartaTavern,
+    CartaTower,
+)
 
 TAMANHO_MAXIMO = 280
+
 
 class Baralho:
     """
@@ -13,10 +27,10 @@ class Baralho:
     cartas : []Carta
         As cartas que o baralho possui.
     """
-    
+
     def __init__(self, cartas: List[Carta] = []):
         self.__cartas: List[Carta] = cartas
-    
+
     def adiciona_carta(self, acao: AcaoCarta, copias: int):
         """Adiciona cartas ao baralho.
 
@@ -28,27 +42,27 @@ class Baralho:
             Quantidade de cópias da carta para adicionar.
         """
         cartas_a_adicionar = []
-        if carta.acao is AcaoCarta.TOWER:
+        if acao is AcaoCarta.TOWER:
             cartas_a_adicionar = [CartaTower() for i in range(copias)]
-        elif carta.acao is FIRE_ARCHER:
+        elif acao is AcaoCarta.FIRE_ARCHER:
             cartas_a_adicionar = [CartaFireArcher() for i in range(copias)]
-        elif carta.acao is KNIGHT:
+        elif acao is AcaoCarta.KNIGHT:
             cartas_a_adicionar = [CartaKnight() for i in range(copias)]
-        elif carta.acao is RECRUIT:
+        elif acao is AcaoCarta.RECRUIT:
             cartas_a_adicionar = [CartaRecruit() for i in range(copias)]
-        elif carta.acao is BUILDER:
+        elif acao is AcaoCarta.BUILDER:
             cartas_a_adicionar = [CartaBuilder() for i in range(copias)]
-        elif carta.acao is TAVERN:
+        elif acao is AcaoCarta.TAVERN:
             cartas_a_adicionar = [CartaTavern() for i in range(copias)]
-        elif carta.acao is MAGE:
+        elif acao is AcaoCarta.MAGE:
             cartas_a_adicionar = [CartaMage() for i in range(copias)]
-        elif carta.acao is ADD_BRICK:
+        elif acao is AcaoCarta.ADD_BRICK:
             cartas_a_adicionar = [CartaAddBrick() for i in range(copias)]
-        elif carta.acao is ADD_WEAPON:
+        elif acao is AcaoCarta.ADD_WEAPON:
             cartas_a_adicionar = [CartaAddWeapon() for i in range(copias)]
-        elif carta.acao is MAGIC_DEFENSE:
+        elif acao is AcaoCarta.MAGIC_DEFENSE:
             cartas_a_adicionar = [CartaMagicDefense() for i in range(copias)]
-        
+
         for carta in cartas_a_adicionar:
             self.__cartas.append(carta)
 
@@ -70,7 +84,7 @@ class Baralho:
         ----------
         acao : AcaoCarta
             Tipo de acão da carta.
-        
+
         Returns
         -------
         int
