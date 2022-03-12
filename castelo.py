@@ -7,7 +7,9 @@ from constants import (
     COLOR_FILL_RED,
     COLOR_RED,
     COLOR_RED_TOWER,
+    FONTE_NAME,
     SCREEN_WIDTH,
+    FONTE_NAME
 )
 from jogador import Jogador
 from carta import Carta
@@ -273,7 +275,7 @@ class Castelo:
             'Escudo Mágico': 'ON' if self.__escudo_magico_buff else 'OFF',
         }
 
-        font = pygame.font.Font("freesansbold.ttf", 12)
+        font = pygame.font.SysFont(None, 20)
         textos = []
         for key, val in info.items():
             texto = font.render(key + ': ' + val, False, (0, 0, 0))
@@ -284,11 +286,11 @@ class Castelo:
             if texto.get_width() > maior_width_textos:
                 maior_width_textos = texto.get_width()
 
-        left = 32
+        left = 25
         if self.__color == COLOR_RED:
             left = SCREEN_WIDTH - maior_width_textos - 32
 
-        top = 32
+        top = 350
         for i in range(len(textos)):
             screen.blit(textos[i], (left, top + (i*16)))
 

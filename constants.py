@@ -17,3 +17,6 @@ COLOR_FILL_RED = (125, 57, 35)
 # Cores das torres dos castelos.
 COLOR_BLUE_TOWER = (29, 48, 71)
 COLOR_RED_TOWER = (66, 36, 27)
+
+#Fonte
+FONTE_NAME = "upheavtt.ttf"

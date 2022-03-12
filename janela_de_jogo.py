@@ -4,7 +4,7 @@ import sys
 
 from enum import Enum
 from carta import Carta, AcaoCarta
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH, FONTE_NAME
 from cenario import Cenario
 
 BG_COLOR = (173, 203, 222)
@@ -57,7 +57,7 @@ class JanelaDeJogo:
     def _desenha_tela_inicial(self):
         screen = self.__screen
 
-        font = pygame.font.Font("freesansbold.ttf", 20)
+        font = pygame.font.Font(FONTE_NAME, 30)
 
         texto = font.render("Iniciar Jogo", False, TEXT_COLOR)
         rect_texto = texto.get_rect(
@@ -77,9 +77,9 @@ class JanelaDeJogo:
             <= SCREEN_WIDTH / 2 + texto.get_width()
             and (SCREEN_HEIGHT / 2) - 32 <= mouse_y <= (SCREEN_WIDTH / 2) + 32
         ):
-            pygame.draw.rect(screen, (105, 105, 105), btn)
+            pygame.draw.rect(screen, (105, 105, 105), btn, border_radius=10)
         else:
-            pygame.draw.rect(screen, (211, 211, 211), btn)
+            pygame.draw.rect(screen, (211, 211, 211), btn, border_radius=10)
 
         self.ouve_eventos_tela_inicial(comprimento_texto=texto.get_width())
 
@@ -88,11 +88,11 @@ class JanelaDeJogo:
     def _desenha_tela_troca_de_turno(self):
         screen = self.__screen
 
-        font = pygame.font.Font("freesansbold.ttf", 20)
+        font = pygame.font.Font(FONTE_NAME, 20)
 
         screen.fill(BG_COLOR)
         pts_text = font.render(
-            "Passe a Vez, Clique Para Continuar", False, TEXT_COLOR
+            "Passe a Vez, Clique Para Continuar", FONTE_NAME, TEXT_COLOR
         )
         rect_pts_text = pts_text.get_rect(
             center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -108,7 +108,7 @@ class JanelaDeJogo:
         floor = pygame.Rect(0, 495, SCREEN_WIDTH, 40)
 
         # Fonte de texto
-        font = pygame.font.Font("freesansbold.ttf", 20)
+        font = pygame.font.Font(FONTE_NAME, 20)
 
         cartas = cria_cartas_usuario()
 
@@ -129,51 +129,30 @@ class JanelaDeJogo:
         pygame.draw.rect(screen, ACCENT_COLOR, deck)
         pygame.draw.rect(screen, FLOOR_COLOR, floor)
 
-        # Desenha botão que irá direcionar para criação do deck.
-        texto = font.render("Criar Deck", False, TEXT_COLOR)
-        rect_texto = texto.get_rect(center=(SCREEN_WIDTH / 2, 64))
-        cria_deck_btn = pygame.Rect(
-            SCREEN_WIDTH / 2 - texto.get_width(),
-            32,
-            texto.get_width() * 2,
-            64,
-        )
-
-        # Highlight the create deck button if mouse hover over it.
-        if (
-            SCREEN_WIDTH / 2 - texto.get_width()
-            <= mouse_x
-            <= SCREEN_WIDTH / 2 + texto.get_width()
-            and 32 <= mouse_y <= 32 + 64
-        ):
-            pygame.draw.rect(screen, (105, 105, 105), cria_deck_btn)
-        else:
-            pygame.draw.rect(screen, (211, 211, 211), cria_deck_btn)
-        screen.blit(texto, rect_texto)
-
         passa_turno_texto = font.render("Passar Turno", False, TEXT_COLOR)
         rect_passa_turno_texto = passa_turno_texto.get_rect(
-            center=(SCREEN_WIDTH / 2, 130)
+            center=(SCREEN_WIDTH / 2, 58)
         )
         passar_turno_btn = pygame.Rect(
-            SCREEN_WIDTH / 2 - passa_turno_texto.get_width(),
-            98,
-            passa_turno_texto.get_width() * 2,
-            64,
+            SCREEN_WIDTH / 2 - (passa_turno_texto.get_width() / 1.65),
+            30,
+            passa_turno_texto.get_width() * 1.2,
+            60,
         )
 
         # Highlight do botão de passar turno quando o mouse estiver sobre
         # ele.
         mouse_x, mouse_y = pygame.mouse.get_pos()
         if (
-            SCREEN_WIDTH / 2 - texto.get_width()
+            (SCREEN_WIDTH / 2) - (passa_turno_texto.get_width() / 1.65)
             <= mouse_x
-            <= SCREEN_WIDTH / 2 + texto.get_width()
-            and 98 <= mouse_y <= 98 + 64
+            <= SCREEN_WIDTH / 2 + passa_turno_texto.get_width()*1.2
+            and 30 <= mouse_y <= 30 + 60
         ):
-            pygame.draw.rect(screen, (105, 105, 105), passar_turno_btn)
+
+            pygame.draw.rect(screen, (152, 173, 139), passar_turno_btn, border_radius=10)
         else:
-            pygame.draw.rect(screen, (211, 211, 211), passar_turno_btn)
+            pygame.draw.rect(screen, (211, 211, 211), passar_turno_btn, border_radius=10)
         screen.blit(passa_turno_texto, rect_passa_turno_texto)
 
         # Desenha castelos na tela.
@@ -241,9 +220,9 @@ class JanelaDeJogo:
                         self.__carta_selecionada.y = carta_y
                         self.__carta_selecionada = None
                 elif (
-                    SCREEN_WIDTH / 2 - 103 <= mouse_x
-                    and mouse_x <= SCREEN_WIDTH / 2 + 103
-                    and 98 <= mouse_y <= 98 + 64
+                    ((SCREEN_WIDTH / 2) - (103/1.65)) <= mouse_x
+                    and mouse_x <= ((SCREEN_WIDTH / 2) + (103*1.2))
+                    and 30 <= mouse_y <= 30 + 60
                 ):
                     self.__tela = Tela.TROCA_DE_TURNO
                 else:
@@ -275,9 +254,9 @@ def cria_cartas_usuario() -> typing.List[Carta]:
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
     texto = font.render("Zona de Descarte", False, TEXT_COLOR)
-    screen.blit(texto, (SCREEN_WIDTH - 480, 100))
+    screen.blit(texto, (SCREEN_WIDTH - 400, 100))
 
 
 def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     texto = font.render("Zona de Jogo", False, TEXT_COLOR)
-    screen.blit(texto, (350, 100))
+    screen.blit(texto, (250, 100))
