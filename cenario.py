@@ -12,8 +12,11 @@ class Cenario:
     def __init__(self):
         self.__jogador_vermelho = Jogador()
         self.__jogador_azul = Jogador()
-        self.__castelo_azul = Castelo.azul(self.__jogador_azul)
-        self.__castelo_vermelho = Castelo.vermelho(self.__jogador_vermelho)
+        self.__castelo_azul = Castelo.azul(Castelo, self.__jogador_azul)
+        self.__castelo_vermelho = Castelo.vermelho(
+            Castelo,
+            self.__jogador_vermelho
+        )
         self.__partida_em_andamento = False
         self.__baralhos_padrao: List[Baralho] = []
         self.__jogador_em_turno: Jogador = None

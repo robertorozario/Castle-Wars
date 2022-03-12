@@ -3,9 +3,7 @@ import typing
 import sys
 
 from carta import Carta, AcaoCarta
-from jogador import Jogador
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
-from castelo import Castelo
 from cenario import Cenario
 
 BG_COLOR = (173, 203, 222)
@@ -44,8 +42,8 @@ class JanelaDeJogo:
         cartas = cria_cartas_usuario()
         carta_selecionada: Carta = None
 
-        castelo_azul = Castelo.azul(Castelo, jogador=Jogador())
-        castelo_vermelho = Castelo.vermelho(Castelo, jogador=Jogador())
+        castelo_azul = self.__cenario.castelo_azul
+        castelo_vermelho = self.__cenario.castelo_vermelho
 
         # Variável para ligar tela de passar turno
         pass_turn = False
