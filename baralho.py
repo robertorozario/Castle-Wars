@@ -1,4 +1,5 @@
 from typing import List
+from random import randint
 
 from carta import (
     AcaoCarta,
@@ -112,3 +113,8 @@ class Baralho:
             uma cópia exata do Baralho atual.
         """
         return Baralho(self.__nome, cartas=self.__cartas)
+
+    def obtem_carta_aleatoria(self) -> Carta:
+        indice_aleatorio = randint(0, len(self.__cartas)-1)
+        carta = self.__cartas.pop(indice_aleatorio)
+        return carta

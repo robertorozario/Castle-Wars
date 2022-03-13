@@ -4,7 +4,7 @@ import sys
 
 from enum import Enum
 from pygame._sdl2 import messagebox
-from carta import Carta, AcaoCarta
+from carta import Carta
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH, FONTE_NAME
 from cenario import Cenario
 from interface_jogador import InterfaceJogador
@@ -366,8 +366,15 @@ class JanelaDeJogo:
         castelo_vermelho.draw_info(screen)
 
         # Desenha as cartas da mão do usuário.
+        initial_left = 50
+        TOP = 545
         for carta in cartas:
-            carta.draw(screen)
+            if carta.posicao_inicial is None:
+                left = (cartas.index(carta) * 150) + initial_left
+                top = TOP
+                carta.draw(screen, top, left)
+            else:
+                carta.draw(screen, carta.top, carta.left)
 
     def ouve_eventos(self, cartas: typing.List[Carta]):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -400,10 +407,10 @@ class JanelaDeJogo:
                         self.__carta_selecionada.y = 0
                         self.__carta_selecionada = None
                     else:
-                        carta_x = self.__carta_selecionada.posicao_inicial[0]
-                        carta_y = self.__carta_selecionada.posicao_inicial[1]
-                        self.__carta_selecionada.x = carta_x
-                        self.__carta_selecionada.y = carta_y
+                        carta_x = self.__carta_selecionada.left
+                        carta_y = self.__carta_selecionada.top
+                        self.__carta_selecionada.left = carta_x
+                        self.__carta_selecionada.top = carta_y
                         self.__carta_selecionada = None
                 elif (
                     ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
@@ -419,24 +426,8 @@ class JanelaDeJogo:
                 if self.__carta_selecionada is not None:
                     botao_esquerdo_pressionado = event.buttons[0]
                     if botao_esquerdo_pressionado:
-                        self.__carta_selecionada.x = event.pos[0]
-                        self.__carta_selecionada.y = event.pos[1]
-
-
-def cria_cartas_usuario() -> typing.List[Carta]:
-    initial_left = 50
-    TOP = 545
-    return [
-        Carta(
-            acao=AcaoCarta,
-            left=(i * 150) + initial_left,
-            top=TOP,
-            espadas=0,
-            cristais=0,
-            tijolos=0,
-        )
-        for i in range(8)
-    ]
+                        self.__carta_selecionada.left = event.pos[0]
+                        self.__carta_selecionada.top = event.pos[1]
 
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):

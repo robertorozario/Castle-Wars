@@ -1,4 +1,3 @@
-import typing
 import pygame
 
 from enum import Enum
@@ -38,24 +37,18 @@ class Carta(pygame.Rect):
     def __init__(
         self,
         acao: AcaoCarta,
-        left: float,
-        top: float,
         cristais: int,
         tijolos: int,
         espadas: int,
         descricao: str,
     ):
-        super().__init__(left, top, CARD_WIDTH, CARD_HEIGHT)
+        super().__init__(0, 0, 0, 0)
         self._acao = acao
-        self._posicao_inicial = (left, top)
         self._cristais = cristais
         self._espadas = espadas
         self._tijolos = tijolos
         self._descricao = descricao
-
-    @property
-    def posicao_inicial(self) -> typing.Tuple:
-        return self._posicao_inicial
+        self._posicao_inicial = None
 
     @property
     def espadas(self) -> int:
@@ -77,10 +70,24 @@ class Carta(pygame.Rect):
     def descricao(self) -> str:
         return self._descricao
 
-    def draw(self, screen: pygame.Surface):
+    @property
+    def posicao_inicial(self):
+        return self._posicao_inicial
+
+    def draw(self, screen: pygame.Surface, top: int, left: int):
         """Draws the card into the pygame screen."""
         # TODO: allow dinamically choose the color from self._tipo
-        pygame.draw.rect(screen, 125, self)
+        if self._posicao_inicial is None:
+            self._posicao_inicial = (left, top)
+        self.top = top
+        self.left = left
+        self.height = CARD_HEIGHT
+        self.width = CARD_WIDTH
+        pygame.draw.rect(
+            screen,
+            125,
+            self,
+        )
 
 
 class CartaTower(Carta):
@@ -91,12 +98,10 @@ class CartaTower(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.TOWER,
-            left=0,
-            top=0,
             cristais=0,
             tijolos=10,
             espadas=0,
-            descricao='Aumenta 10 níveis de seu castelo.'
+            descricao="Aumenta 10 níveis de seu castelo.",
         )
 
 
@@ -109,12 +114,10 @@ class CartaFireArcher(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.FIRE_ARCHER,
-            left=0,
-            top=0,
             cristais=0,
             tijolos=0,
             espadas=3,
-            descricao='Diminui 5 níveis do castelo adversário.'
+            descricao="Diminui 5 níveis do castelo adversário.",
         )
 
 
@@ -127,12 +130,10 @@ class CartaKnight(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.KNIGHT,
-            left=0,
-            top=0,
             cristais=0,
             tijolos=0,
             espadas=10,
-            descricao='Ataca o castelo adversário diminuindo 12 níveis dele.'
+            descricao="Ataca o castelo adversário diminuindo 12 níveis dele.",
         )
 
 
@@ -144,12 +145,10 @@ class CartaRecruit(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.RECRUIT,
-            left=0,
-            top=0,
             cristais=0,
             espadas=8,
             tijolos=0,
-            descricao='Acrescenta um soldado ao seu castelo.'
+            descricao="Acrescenta um soldado ao seu castelo.",
         )
 
 
@@ -161,12 +160,10 @@ class CartaBuilder(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.BUILDER,
-            left=0,
-            top=0,
             cristais=0,
             espadas=0,
             tijolos=8,
-            descricao='Acrescenta 1 construtor ao seu castelo.'
+            descricao="Acrescenta 1 construtor ao seu castelo.",
         )
 
 
@@ -178,12 +175,10 @@ class CartaTavern(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.TAVERN,
-            left=0,
-            top=0,
             cristais=0,
             espadas=0,
             tijolos=12,
-            descricao='Acrescenta 15 níveis ao seu castelo.'
+            descricao="Acrescenta 15 níveis ao seu castelo.",
         )
 
 
@@ -195,12 +190,10 @@ class CartaMage(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.MAGE,
-            left=0,
-            top=0,
             cristais=8,
             espadas=0,
             tijolos=0,
-            descricao='Acrescenta 1 mago ao seu castelo.'
+            descricao="Acrescenta 1 mago ao seu castelo.",
         )
 
 
@@ -212,12 +205,10 @@ class CartaAddBrick(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.ADD_BRICK,
-            left=0,
-            top=0,
             cristais=5,
             espadas=0,
             tijolos=0,
-            descricao='Acrescenta 8 tijolos ao seu castelo.'
+            descricao="Acrescenta 8 tijolos ao seu castelo.",
         )
 
 
@@ -229,12 +220,10 @@ class CartaAddWeapon(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.ADD_WEAPON,
-            left=0,
-            top=0,
             cristais=5,
             espadas=0,
             tijolos=0,
-            descricao='Acrescenta 8 espadas ao seu castelo.'
+            descricao="Acrescenta 8 espadas ao seu castelo.",
         )
 
 
@@ -247,10 +236,8 @@ class CartaMagicDefense(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.MAGIC_DEFENSE,
-            left=0,
-            top=0,
             cristais=15,
             espadas=0,
             tijolos=0,
-            descricao='Ativa o buff escudo mágico, impedindo o próximo ataque.'
+            descricao="Ativa o buff escudo mágico, impedindo o próximo ataque.",
         )

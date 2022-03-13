@@ -229,6 +229,19 @@ class Cenario:
             self.__partida_em_andamento = True
             self.__castelo_azul.aplica_configuracao_inicial()
             self.__castelo_vermelho.aplica_configuracao_inicial()
+
+            # Obtem mão inicial jogador azul.
+            for _ in range(8):
+                carta = self.__jogador_azul.baralho.obtem_carta_aleatoria()
+                self.__jogador_azul.mao = self.__jogador_azul.mao + [carta]
+
+            # Obtem mão inicial jogador azul.
+            for _ in range(8):
+                carta = self.__jogador_vermelho.baralho.obtem_carta_aleatoria()
+                self.__jogador_vermelho.mao = (
+                    self.__jogador_vermelho.mao + [carta]
+                )
+
         else:
             self.draw_avisos(pygame.Surface)
 
