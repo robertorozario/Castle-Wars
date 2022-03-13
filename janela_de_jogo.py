@@ -3,9 +3,11 @@ import typing
 import sys
 
 from enum import Enum
+from pygame._sdl2 import messagebox
 from carta import Carta, AcaoCarta
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH, FONTE_NAME
 from cenario import Cenario
+from interface_jogador import InterfaceJogador
 
 BG_COLOR = (173, 203, 222)
 ACCENT_COLOR = (15, 97, 20)
@@ -31,8 +33,12 @@ class JanelaDeJogo:
         self.__carta_selecionada: Carta = None
         self.__pass_turn = False
         self.__tela: Tela = Tela.INICIAL
-        self.__baralho_selecionado_azul = None
-        self.__baralho_selecionado_vermelho = None
+        self.__interface_jogador = InterfaceJogador(
+            screen,
+            self.__cenario.jogador_azul,
+            self.__cenario.jogador_vermelho,
+            self.__cenario,
+        )
 
     def inicia_loop_jogo(self):
         self.__loop = True
@@ -86,8 +92,6 @@ class JanelaDeJogo:
         else:
             pygame.draw.rect(screen, (211, 211, 211), btn, border_radius=10)
 
-        self.ouve_eventos_tela_inicial(comprimento_texto=texto.get_width())
-
         botoes_baralho_azul = []
         for baralho in self.__cenario.baralhos_padrao:
             indice = self.__cenario.baralhos_padrao.index(baralho)
@@ -103,7 +107,9 @@ class JanelaDeJogo:
                 }
             )
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            if indice == self.__baralho_selecionado_azul:
+            if (
+                self.__cenario.jogador_azul.baralho is not None
+            ) and baralho.nome == self.__cenario.jogador_azul.baralho.nome:
                 pygame.draw.rect(
                     screen,
                     (0, 0, 204),
@@ -140,7 +146,9 @@ class JanelaDeJogo:
                     "right": left + 300,
                 }
             )
-            if indice == self.__baralho_selecionado_vermelho:
+            if (
+                self.__cenario.jogador_vermelho.baralho is not None
+            ) and baralho.nome == self.__cenario.jogador_vermelho.baralho.nome:
                 pygame.draw.rect(
                     screen,
                     (204, 0, 0),
@@ -149,7 +157,9 @@ class JanelaDeJogo:
                 )
             else:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                if (left <= mouse_x <= SCREEN_WIDTH - 32) and (top <= mouse_y <= top + 32):
+                if (left <= mouse_x <= SCREEN_WIDTH - 32) and (
+                    top <= mouse_y <= (top + 32)
+                ):
                     pygame.draw.rect(
                         screen,
                         (105, 105, 105),
@@ -219,21 +229,34 @@ class JanelaDeJogo:
                     <= mouse_x
                     <= (half_width + comprimento_texto)
                 ) and ((half_height - 32) <= mouse_y <= (half_height + 32)):
-                    self.__tela = Tela.JOGO
+                    if self.__cenario.jogadores_estao_prontos():
+                        self.__tela = Tela.JOGO
+                        self.__cenario.iniciar_jogo()
+                    else:
+                        messagebox(
+                            "Erro",
+                            "Algum jogador ainda não selecionou o baralho",
+                        )
 
                 for botao in botoes_baralho_vermelho:
                     if (botao["left"] <= mouse_x <= botao["right"]) and (
                         botao["top"] <= mouse_y <= botao["bottom"]
                     ):
                         indice = botoes_baralho_vermelho.index(botao)
-                        self.__baralho_selecionado_vermelho = indice
+                        self.__interface_jogador.seleciona_baralho(
+                            indice,
+                            "vermelho",
+                        )
 
                 for botao in botoes_baralho_azul:
                     if (botao["left"] <= mouse_x <= botao["right"]) and (
                         botao["top"] <= mouse_y <= botao["bottom"]
                     ):
                         indice = botoes_baralho_azul.index(botao)
-                        self.__baralho_selecionado_azul = indice
+                        self.__interface_jogador.seleciona_baralho(
+                            indice,
+                            "azul",
+                        )
 
     def _desenha_tela_troca_de_turno(self):
         screen = self.__screen
@@ -326,23 +349,6 @@ class JanelaDeJogo:
         # Desenha as cartas da mão do usuário.
         for carta in cartas:
             carta.draw(screen)
-
-    def ouve_eventos_tela_inicial(self, comprimento_texto: int):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                half_width = SCREEN_WIDTH / 2
-                half_height = SCREEN_HEIGHT / 2
-                if (
-                    (half_width - comprimento_texto)
-                    <= mouse_x
-                    <= (half_width + comprimento_texto)
-                ) and ((half_height - 32) <= mouse_y <= (half_height + 32)):
-                    self.__tela = Tela.JOGO
 
     def ouve_eventos(self, cartas: typing.List[Carta]):
         mouse_x, mouse_y = pygame.mouse.get_pos()

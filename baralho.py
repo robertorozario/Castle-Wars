@@ -111,4 +111,4 @@ class Baralho:
         Baralho
             uma cópia exata do Baralho atual.
         """
-        return self.__init__(self.__nome, cartas=self.__cartas)
+        return Baralho(self.__nome, cartas=self.__cartas)
