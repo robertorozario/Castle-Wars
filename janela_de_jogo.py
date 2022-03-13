@@ -97,13 +97,13 @@ class JanelaDeJogo:
         for baralho in self.__cenario.baralhos_padrao:
             indice = self.__cenario.baralhos_padrao.index(baralho)
             left = 32
-            top = 96 + (80 * indice)
-            botao_baralho = pygame.Rect(left, top, 300, 32)
+            top = 96 + (100 * indice)
+            botao_baralho = pygame.Rect(left, top, 300, 60)
             botoes_baralho_azul.append(
                 {
                     "top": top,
                     "left": left,
-                    "bottom": top + 32,
+                    "bottom": top + 100,
                     "right": left + 300,
                 }
             )
@@ -137,13 +137,13 @@ class JanelaDeJogo:
         for baralho in self.__cenario.baralhos_padrao:
             indice = self.__cenario.baralhos_padrao.index(baralho)
             left = SCREEN_WIDTH - 32 - 300
-            top = 96 + (80 * indice)
-            botao_baralho = pygame.Rect(left, top, 300, 32)
+            top = 96 + (100 * indice)
+            botao_baralho = pygame.Rect(left, top, 300, 60)
             botoes_baralho_vermelho.append(
                 {
                     "top": top,
                     "left": left,
-                    "bottom": top + 32,
+                    "bottom": top + 60,
                     "right": left + 300,
                 }
             )
@@ -158,8 +158,8 @@ class JanelaDeJogo:
                 )
             else:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                if (left <= mouse_x <= SCREEN_WIDTH - 32) and (
-                    top <= mouse_y <= (top + 32)
+                if (left <= mouse_x <= SCREEN_WIDTH - 60) and (
+                    top <= mouse_y <= (top + 60)
                 ):
                     pygame.draw.rect(
                         screen,
@@ -181,7 +181,7 @@ class JanelaDeJogo:
             rect_texto_baralho = texto.get_rect(
                 center=(
                     198,
-                    96 + ((160 * indice) + 32) / 2,
+                    96 + ((200 * indice) + 60) / 2,
                 )
             )
             screen.blit(texto_baralho, rect_texto_baralho)
@@ -192,20 +192,20 @@ class JanelaDeJogo:
             rect_texto_baralho = texto.get_rect(
                 center=(
                     SCREEN_WIDTH - 154,
-                    96 + ((160 * indice) + 32) / 2,
+                    96 + ((200 * indice) + 60) / 2,
                 )
             )
             screen.blit(texto_baralho, rect_texto_baralho)
 
         screen.blit(
-            font.render("Escolha baralho do jogador azul", False, TEXT_COLOR),
+            font.render("Escolha baralho do jogador azul", False, (255,255,255)),
             (32, 32),
         )
 
         texto_escolha_vermelho = font.render(
             "Escolha baralho do jogador vermelho",
             False,
-            TEXT_COLOR,
+            (255,255,255),
         )
         screen.blit(
             texto_escolha_vermelho,
@@ -323,10 +323,6 @@ class JanelaDeJogo:
         # Background Stuff
         screen.fill(BG_COLOR)
 
-        # Desenha zonas de arraste das cartas.
-        desenha_zona_de_jogo(screen, font)
-        desenha_zona_de_descarte(screen, font)
-
         # Desenha espaço de deck e chão.
         pygame.draw.rect(screen, ACCENT_COLOR, deck)
         pygame.draw.rect(screen, FLOOR_COLOR, floor)
@@ -371,6 +367,10 @@ class JanelaDeJogo:
         castelo_azul.draw_info(screen)
         castelo_vermelho.draw(screen)
         castelo_vermelho.draw_info(screen)
+
+        # Desenha zonas de arraste das cartas.
+        desenha_zona_de_jogo(screen, font)
+        desenha_zona_de_descarte(screen, font)
 
         # Desenha as cartas da mão do usuário.
         pos_x = 115
@@ -441,10 +441,73 @@ class JanelaDeJogo:
 
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
-    texto = font.render("Zona de Descarte", False, TEXT_COLOR)
-    screen.blit(texto, (SCREEN_WIDTH - 400, 100))
+    descarta_texto = font.render("Descartar Carta", False, TEXT_COLOR)
+    rect_texto = descarta_texto.get_rect(
+        center=(1000, 110)
+    )
+    descarta_btn = pygame.Rect(
+        SCREEN_WIDTH - (descarta_texto.get_width() *2.32),
+        80,
+        descarta_texto.get_width() * 1.2,
+        60,
+    )
+
+    # Highlight do botão de passar turno quando o mouse estiver sobre
+    # ele.
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    if (
+        (SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)
+        <= mouse_x
+        <= ((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32) + descarta_texto.get_width() * 1.2)
+    ) and 80 <= mouse_y <= 80 + 60:
+
+        pygame.draw.rect(
+            screen,
+            (152, 173, 139),
+            descarta_btn,
+            border_radius=10,
+        )
+    else:
+        pygame.draw.rect(
+            screen,
+            (211, 211, 211),
+            descarta_btn,
+            border_radius=10,
+        )
+    screen.blit(descarta_texto, rect_texto)
 
 
 def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
-    texto = font.render("Zona de Jogo", False, TEXT_COLOR)
-    screen.blit(texto, (250, 100))
+    jogar_texto = font.render("Jogar Carta", False, TEXT_COLOR)
+    rect_texto = jogar_texto.get_rect(
+        center=(300, 110)
+    )
+    jogar_btn = pygame.Rect(
+        225,
+        80,
+        jogar_texto.get_width() * 1.2,
+        60,
+    )
+    # Highlight do botão de passar turno quando o mouse estiver sobre
+    # ele.
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    if (
+        (225)
+        <= mouse_x
+        <= (225 + (jogar_texto.get_width() / 1.2))
+    ) and 80 <= mouse_y <= 80 + 60:
+
+        pygame.draw.rect(
+            screen,
+            (152, 173, 139),
+            jogar_btn,
+            border_radius=10,
+        )
+    else:
+        pygame.draw.rect(
+            screen,
+            (211, 211, 211),
+            jogar_btn,
+            border_radius=10,
+        )
+    screen.blit(jogar_texto, rect_texto)

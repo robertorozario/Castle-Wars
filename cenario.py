@@ -251,21 +251,6 @@ class Cenario:
                     self.__jogador_vermelho.mao + [carta]
                 )
 
-        else:
-            self.draw_avisos(pygame.Surface)
-
-    def draw_avisos(self, screen: pygame.Surface):
-        if not (self.jogadores_estao_prontos() and self.partida_em_andamento):
-            if self.__jogador_azul.baralho is None:
-                message = "Azul"
-            elif self.__jogador_vermelho.baralho is None:
-                message = "Vermelho"
-            texto = f"Jogador {message} sem baralho"
-            font = pygame.font.SysFont(None, 20)
-            pts_text = font.render(texto, "upheavtt.ttf", (0, 0, 0))
-            rect_pts_text = pts_text.get_rect(center=(1300 / 2, 700 / 2))
-            screen.blit(pts_text, rect_pts_text)
-
     def jogadores_estao_prontos(self) -> bool:
         """Verifica se ambos jogadores estão prontos para começar partida."""
         return self.__jogador_azul.pronto and self.__jogador_vermelho.pronto
