@@ -30,7 +30,9 @@ class JanelaDeJogo:
         self.__screen = screen
         self.__cenario = cenario
         self.__loop = False
-        self.__carta_selecionada: Carta = None
+        self.__carta_selecionada = None
+        self.__hand_group = pygame.sprite.Group()
+        self.__grupo_selecionada = pygame.sprite.Group()
         self.__tela: Tela = Tela.INICIAL
         self.__interface_jogador = InterfaceJogador(
             screen,
@@ -286,7 +288,7 @@ class JanelaDeJogo:
             )
         )
         screen.blit(pts_text, rect_pts_text)
-        self.ouve_eventos([])
+        self.ouve_eventos(pygame.Rect(-100, -100, 1, 1))
 
     def _desenha_tela_jogo(self):
         # Setting up the main window
@@ -310,8 +312,13 @@ class JanelaDeJogo:
         castelo_azul = self.__cenario.castelo_azul
         castelo_vermelho = self.__cenario.castelo_vermelho
 
+        #Grupo de Sprites pra desenhar mão do jogador
+        hand_group = pygame.sprite.Group()
+
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        self.ouve_eventos(cartas)
+        mouse_rect = pygame.Rect(mouse_x, mouse_y, 60, 60)
+        pygame.draw.rect(self.__screen, "Grey", mouse_rect)
+        self.ouve_eventos(mouse_rect)
 
         # Background Stuff
         screen.fill(BG_COLOR)
@@ -368,18 +375,18 @@ class JanelaDeJogo:
         # Desenha as cartas da mão do usuário.
         pos_x = 115
         pos_y = 620
-        hand_group = pygame.sprite.Group()
         for carta in cartas:
             if carta.posicao_inicial is None:
                 left = (cartas.index(carta) * 150) + pos_x
                 top = pos_y
                 carta.rect = carta.image.get_rect(center=(left, top))
-                hand_group.add(carta)
+                self.__hand_group.add(carta)
             else:
-                hand_group.add(carta)
-        hand_group.draw(screen)
+                self.__hand_group.add(carta)
+        self.__hand_group.draw(screen)
+        print(len(self.__hand_group.sprites()))
 
-    def ouve_eventos(self, cartas: typing.List[Carta]):
+    def ouve_eventos(self, mouse_rect):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -389,8 +396,8 @@ class JanelaDeJogo:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Se o mouse está clicado seleciona a carta que colidiu o
                 # evento.
-                for carta in cartas:
-                    if carta.rect.collidepoint(event.pos):
+                for carta in self.__hand_group:
+                    if pygame.Rect.colliderect(carta.rect, mouse_rect):
                         self.__carta_selecionada = carta
             elif event.type == pygame.MOUSEBUTTONUP:
                 # Botão do mouse foi solto desceleciona a carta e deixa-a
@@ -403,18 +410,18 @@ class JanelaDeJogo:
                     em qual das zonas ela se encontra, apenas se está acima
                     da área da mão, elaborar isso na versão final
                     """
-                    if self.__carta_selecionada.y < (
+                    if self.__carta_selecionada.rect.y < (
                         SCREEN_HEIGHT - ((SCREEN_HEIGHT / 4) + 40)
                     ):
                         self.__carta_selecionada.rect.x = -200
                         self.__carta_selecionada.rect.y = 0
-                        self.__carta_selecionada.rect = None
+                        self.__carta_selecionada = None
                     else:
-                        carta_x = self.__carta_selecionada.left
-                        carta_y = self.__carta_selecionada.top
+                        carta_x = self.__carta_selecionada.rect.left
+                        carta_y = self.__carta_selecionada.rect.top
                         self.__carta_selecionada.rect.left = carta_x
                         self.__carta_selecionada.rect.top = carta_y
-                        self.__carta_selecionada.rect = None
+                        self.__carta_selecionada = None
                 elif (
                     ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
                     and mouse_x <= ((SCREEN_WIDTH / 2) + (103 * 1.2))
@@ -429,8 +436,8 @@ class JanelaDeJogo:
                 if self.__carta_selecionada is not None:
                     botao_esquerdo_pressionado = event.buttons[0]
                     if botao_esquerdo_pressionado:
-                        self.__carta_selecionada.left = event.pos[0]
-                        self.__carta_selecionada.top = event.pos[1]
+                        pos = pygame.mouse.get_pos()
+                        self.__carta_selecionada.rect.midtop = pos
 
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
