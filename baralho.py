@@ -26,10 +26,17 @@ class Baralho:
     ----------
     cartas : []Carta
         As cartas que o baralho possui.
+    nome : str
+        O nome do baralho para mostrar ao Jogador.
     """
 
-    def __init__(self, cartas: List[Carta] = []):
+    def __init__(self, nome: str, cartas: List[Carta] = []):
         self.__cartas: List[Carta] = cartas
+        self.__nome = nome
+
+    @property
+    def nome(self) -> str:
+        return self.__nome
 
     def adiciona_carta(self, acao: AcaoCarta, copias: int):
         """Adiciona cartas ao baralho.
@@ -104,4 +111,4 @@ class Baralho:
         Baralho
             uma cópia exata do Baralho atual.
         """
-        return self.__init__(cartas=self.__cartas)
+        return self.__init__(self.__nome, cartas=self.__cartas)

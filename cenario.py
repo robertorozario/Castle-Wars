@@ -32,6 +32,7 @@ class Cenario:
         self.__partida_em_andamento = False
         self.__baralhos_padrao: List[Baralho] = [
             Baralho(
+                nome='Baralho 1',
                 cartas=[CartaTower() for _ in range(5)]
                 + [CartaAddBrick() for _ in range(5)]
                 + [CartaMage() for _ in range(5)]
@@ -39,6 +40,31 @@ class Cenario:
                 + [CartaFireArcher() for _ in range(5)]
             ),
             Baralho(
+                nome='Baralho 2',
+                cartas=[CartaAddBrick() for _ in range(5)]
+                + [CartaKnight() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(5)]
+                + [CartaBuilder() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)]
+            ),
+            Baralho(
+                nome='Baralho 3',
+                cartas=[CartaAddBrick() for _ in range(5)]
+                + [CartaKnight() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(5)]
+                + [CartaBuilder() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)]
+            ),
+            Baralho(
+                nome='Baralho 4',
+                cartas=[CartaAddBrick() for _ in range(5)]
+                + [CartaKnight() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(5)]
+                + [CartaBuilder() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)]
+            ),
+            Baralho(
+                nome='Baralho 5',
                 cartas=[CartaAddBrick() for _ in range(5)]
                 + [CartaKnight() for _ in range(5)]
                 + [CartaMagicDefense() for _ in range(5)]
