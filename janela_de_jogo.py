@@ -31,7 +31,6 @@ class JanelaDeJogo:
         self.__cenario = cenario
         self.__loop = False
         self.__carta_selecionada: Carta = None
-        self.__pass_turn = False
         self.__tela: Tela = Tela.INICIAL
         self.__interface_jogador = InterfaceJogador(
             screen,
@@ -392,6 +391,7 @@ class JanelaDeJogo:
                     and 30 <= mouse_y <= 30 + 60
                 ):
                     self.__tela = Tela.TROCA_DE_TURNO
+                    self.__interface_jogador.passar_turno()
                 else:
                     self.__tela = Tela.JOGO
             elif event.type == pygame.MOUSEMOTION:

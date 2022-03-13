@@ -7,9 +7,7 @@ from constants import (
     COLOR_FILL_RED,
     COLOR_RED,
     COLOR_RED_TOWER,
-    FONTE_NAME,
     SCREEN_WIDTH,
-    FONTE_NAME
 )
 from jogador import Jogador
 from carta import Carta
@@ -165,8 +163,12 @@ class Castelo:
         """
 
         self.__nivel = 30
-        self.__magos, self.__construtores, self.__soldados = 2
-        self.__cristais, self.__espadas, self.__tijolos = 5
+        self.__magos = 2
+        self.__construtores = 2
+        self.__soldados = 2
+        self.__cristais = 5
+        self.__espadas = 5
+        self.__tijolos = 5
 
     def adicionar_recursos(self):
         """Adiciona os recursos de troca de turno ao Castelo."""
