@@ -18,7 +18,7 @@ class AcaoCarta(Enum):
     MAGIC_DEFENSE = 10
 
 
-class Carta(pygame.Rect):
+class Carta(pygame.sprite.Sprite):
     """
     Representação das cartas do jogo que realizam ações.
 
@@ -41,14 +41,21 @@ class Carta(pygame.Rect):
         tijolos: int,
         espadas: int,
         descricao: str,
+        x_pos,
+        y_pos,
+        path,
     ):
-        super().__init__(0, 0, 0, 0)
+        super().__init__()
+        self.image = pygame.image.load(path)
+        self.rect = self.image.get_rect(center=(x_pos, y_pos))
         self._acao = acao
         self._cristais = cristais
         self._espadas = espadas
         self._tijolos = tijolos
         self._descricao = descricao
         self._posicao_inicial = None
+        self.image = pygame.image.load(path)
+        self.rect = self.image.get_rect(center=(x_pos, y_pos))
 
     @property
     def espadas(self) -> int:
@@ -74,7 +81,7 @@ class Carta(pygame.Rect):
     def posicao_inicial(self):
         return self._posicao_inicial
 
-    def draw(self, screen: pygame.Surface, top: int, left: int):
+    '''def draw(self, screen: pygame.Surface, top: int, left: int):
         """Draws the card into the pygame screen."""
         # TODO: allow dinamically choose the color from self._tipo
         if self._posicao_inicial is None:
@@ -87,7 +94,7 @@ class Carta(pygame.Rect):
             screen,
             125,
             self,
-        )
+        )'''
 
 
 class CartaTower(Carta):
@@ -102,6 +109,9 @@ class CartaTower(Carta):
             tijolos=10,
             espadas=0,
             descricao="Aumenta 10 níveis de seu castelo.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -118,6 +128,9 @@ class CartaFireArcher(Carta):
             tijolos=0,
             espadas=3,
             descricao="Diminui 5 níveis do castelo adversário.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -134,6 +147,9 @@ class CartaKnight(Carta):
             tijolos=0,
             espadas=10,
             descricao="Ataca o castelo adversário diminuindo 12 níveis dele.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -149,6 +165,9 @@ class CartaRecruit(Carta):
             espadas=8,
             tijolos=0,
             descricao="Acrescenta um soldado ao seu castelo.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -164,6 +183,9 @@ class CartaBuilder(Carta):
             espadas=0,
             tijolos=8,
             descricao="Acrescenta 1 construtor ao seu castelo.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -179,6 +201,9 @@ class CartaTavern(Carta):
             espadas=0,
             tijolos=12,
             descricao="Acrescenta 15 níveis ao seu castelo.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -194,6 +219,9 @@ class CartaMage(Carta):
             espadas=0,
             tijolos=0,
             descricao="Acrescenta 1 mago ao seu castelo.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -209,6 +237,9 @@ class CartaAddBrick(Carta):
             espadas=0,
             tijolos=0,
             descricao="Acrescenta 8 tijolos ao seu castelo.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -224,6 +255,9 @@ class CartaAddWeapon(Carta):
             espadas=0,
             tijolos=0,
             descricao="Acrescenta 8 espadas ao seu castelo.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )
 
 
@@ -240,4 +274,7 @@ class CartaMagicDefense(Carta):
             espadas=0,
             tijolos=0,
             descricao="Ativa o buff escudo mágico, impedindo o próximo ataque.",
+            x_pos=0,
+            y_pos=0,
+            path="Carta_Template.png",
         )

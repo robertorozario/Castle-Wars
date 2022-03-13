@@ -366,15 +366,18 @@ class JanelaDeJogo:
         castelo_vermelho.draw_info(screen)
 
         # Desenha as cartas da mão do usuário.
-        initial_left = 50
-        TOP = 545
+        pos_x = 115
+        pos_y = 620
+        hand_group = pygame.sprite.Group()
         for carta in cartas:
             if carta.posicao_inicial is None:
-                left = (cartas.index(carta) * 150) + initial_left
-                top = TOP
-                carta.draw(screen, top, left)
+                left = (cartas.index(carta) * 150) + pos_x
+                top = pos_y
+                carta.rect = carta.image.get_rect(center=(left, top))
+                hand_group.add(carta)
             else:
-                carta.draw(screen, carta.top, carta.left)
+                hand_group.add(carta)
+        hand_group.draw(screen)
 
     def ouve_eventos(self, cartas: typing.List[Carta]):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -387,7 +390,7 @@ class JanelaDeJogo:
                 # Se o mouse está clicado seleciona a carta que colidiu o
                 # evento.
                 for carta in cartas:
-                    if carta.collidepoint(event.pos):
+                    if carta.rect.collidepoint(event.pos):
                         self.__carta_selecionada = carta
             elif event.type == pygame.MOUSEBUTTONUP:
                 # Botão do mouse foi solto desceleciona a carta e deixa-a
@@ -403,15 +406,15 @@ class JanelaDeJogo:
                     if self.__carta_selecionada.y < (
                         SCREEN_HEIGHT - ((SCREEN_HEIGHT / 4) + 40)
                     ):
-                        self.__carta_selecionada.x = -200
-                        self.__carta_selecionada.y = 0
-                        self.__carta_selecionada = None
+                        self.__carta_selecionada.rect.x = -200
+                        self.__carta_selecionada.rect.y = 0
+                        self.__carta_selecionada.rect = None
                     else:
                         carta_x = self.__carta_selecionada.left
                         carta_y = self.__carta_selecionada.top
-                        self.__carta_selecionada.left = carta_x
-                        self.__carta_selecionada.top = carta_y
-                        self.__carta_selecionada = None
+                        self.__carta_selecionada.rect.left = carta_x
+                        self.__carta_selecionada.rect.top = carta_y
+                        self.__carta_selecionada.rect = None
                 elif (
                     ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
                     and mouse_x <= ((SCREEN_WIDTH / 2) + (103 * 1.2))

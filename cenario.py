@@ -14,6 +14,7 @@ from carta import (
     CartaMagicDefense,
     CartaRecruit,
     CartaTower,
+    CartaTavern,
 )
 from baralho import Baralho
 from castelo import Castelo
@@ -32,44 +33,52 @@ class Cenario:
         self.__partida_em_andamento = False
         self.__baralhos_padrao: List[Baralho] = [
             Baralho(
-                nome="Baralho 1",
-                cartas=[CartaTower() for _ in range(5)]
-                + [CartaAddBrick() for _ in range(5)]
-                + [CartaMage() for _ in range(5)]
+                nome="Completo",
+                cartas=[CartaFireArcher() for _ in range(5)]
+                + [CartaKnight() for _ in range(5)]
                 + [CartaRecruit() for _ in range(5)]
-                + [CartaFireArcher() for _ in range(5)],
+                + [CartaBuilder() for _ in range(5)]
+                + [CartaTower() for _ in range(5)]
+                + [CartaTavern() for _ in range(5)]
+                + [CartaMage() for _ in range(5)]
+                + [CartaAddBrick() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(5)],
             ),
             Baralho(
-                nome="Baralho 2",
-                cartas=[CartaAddBrick() for _ in range(5)]
-                + [CartaKnight() for _ in range(5)]
-                + [CartaMagicDefense() for _ in range(5)]
-                + [CartaBuilder() for _ in range(5)]
-                + [CartaAddWeapon() for _ in range(5)],
+                nome="Balanceado",
+                cartas=[CartaFireArcher() for _ in range(5)]
+                + [CartaKnight() for _ in range(3)]
+                + [CartaRecruit() for _ in range(3)]
+                + [CartaBuilder() for _ in range(2)]
+                + [CartaTower() for _ in range(5)]
+                + [CartaTavern() for _ in range(2)],
             ),
             Baralho(
-                nome="Baralho 3",
-                cartas=[CartaAddBrick() for _ in range(5)]
-                + [CartaKnight() for _ in range(5)]
-                + [CartaMagicDefense() for _ in range(5)]
-                + [CartaBuilder() for _ in range(5)]
-                + [CartaAddWeapon() for _ in range(5)],
+                nome="Controle",
+                cartas=[CartaBuilder() for _ in range(4)]
+                + [CartaTower() for _ in range(5)]
+                + [CartaTavern() for _ in range(5)]
+                + [CartaAddBrick() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(3)]
+                + [CartaMage() for _ in range(3)],
             ),
             Baralho(
-                nome="Baralho 4",
-                cartas=[CartaAddBrick() for _ in range(5)]
-                + [CartaKnight() for _ in range(5)]
+                nome="Slow Burn",
+                cartas=[CartaBuilder() for _ in range(5)]
+                + [CartaMage() for _ in range(5)]
+                + [CartaFireArcher() for _ in range(5)]
                 + [CartaMagicDefense() for _ in range(5)]
-                + [CartaBuilder() for _ in range(5)]
-                + [CartaAddWeapon() for _ in range(5)],
+                + [CartaTower() for _ in range(5)],
             ),
             Baralho(
-                nome="Baralho 5",
-                cartas=[CartaAddBrick() for _ in range(5)]
+                nome="Mass Attack",
+                cartas=[CartaRecruit() for _ in range(5)]
                 + [CartaKnight() for _ in range(5)]
-                + [CartaMagicDefense() for _ in range(5)]
-                + [CartaBuilder() for _ in range(5)]
-                + [CartaAddWeapon() for _ in range(5)],
+                + [CartaMage() for _ in range(3)]
+                + [CartaAddWeapon() for _ in range(5)]
+                + [CartaFireArcher() for _ in range(2)]
+                + [CartaTower() for _ in range(3)],
             ),
         ]
         self.__jogador_em_turno: Jogador = None
