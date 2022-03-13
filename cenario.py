@@ -1,3 +1,4 @@
+from ast import Return
 import pygame
 
 from typing import List
@@ -117,7 +118,7 @@ class Cenario:
 
     @jogador_em_turno_pronto.setter
     def jogador_em_turno_pronto(self, jogador_em_turno_pronto: bool):
-        return self.__jogador_em_turno_pronto
+        self.__jogador_em_turno_pronto = jogador_em_turno_pronto
 
     def obtem_castelo_jogador(self, jogador: Jogador) -> Castelo:
         """Dado um Jogador obtem o castelo associado a ele.
@@ -203,6 +204,12 @@ class Cenario:
 
     def anuncia_vencedor(self):
         pass
+        """
+        if self.__jogador_azul.vencedor() == True:
+            result = 'Jogador Azul venceu'
+        elif self.__jogador_vermelho.vencedor() == True:
+            result = 'Jogador Vermelho venceu'"""
+
 
     def finaliza_partida(self):
         """Finaliza a partida permitindo iniciar uma nova partida."""
@@ -218,9 +225,27 @@ class Cenario:
 
     def iniciar_jogo(self):
         """Inicia o jogo se os jogadores estiverem prontos."""
-
         if self.jogadores_estao_prontos():
             self.__partida_em_andamento = True
+        else:
+            self.draw_avisos(pygame.Surface)
+
+    def draw_avisos(self, screen: pygame.Surface):
+        if not (self.jogadores_estao_prontos() and self.__partida_em_andamento):
+            if self.__jogador_azul.baralho == None:
+                message = 'Azul'
+            elif self.__jogador_vermelho.baralho == None:
+                message = 'Vermelho'
+            texto = f'Jogador {message} sem baralho'
+            font = pygame.font.SysFont(None, 20)
+            pts_text = font.render(
+                texto, "upheavtt.ttf", (0,0,0)
+            )
+            rect_pts_text = pts_text.get_rect(
+                center=(1300 / 2, 700 / 2)
+            )
+            screen.blit(pts_text, rect_pts_text)
+        
 
     def jogadores_estao_prontos(self) -> bool:
         """Verifica se ambos jogadores estão prontos para começar partida."""
