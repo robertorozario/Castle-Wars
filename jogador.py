@@ -55,6 +55,8 @@ class Jogador:
     @baralho.setter
     def baralho(self, baralho: Baralho):
         self.__baralho = baralho
+        if baralho is not None:
+            self.__pronto = True
 
     @property
     def mao(self) -> List[Carta]:

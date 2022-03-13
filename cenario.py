@@ -1,4 +1,3 @@
-from ast import Return
 import pygame
 
 from typing import List
@@ -33,18 +32,44 @@ class Cenario:
         self.__partida_em_andamento = False
         self.__baralhos_padrao: List[Baralho] = [
             Baralho(
+                nome="Baralho 1",
                 cartas=[CartaTower() for _ in range(5)]
                 + [CartaAddBrick() for _ in range(5)]
                 + [CartaMage() for _ in range(5)]
                 + [CartaRecruit() for _ in range(5)]
-                + [CartaFireArcher() for _ in range(5)]
+                + [CartaFireArcher() for _ in range(5)],
             ),
             Baralho(
+                nome="Baralho 2",
                 cartas=[CartaAddBrick() for _ in range(5)]
                 + [CartaKnight() for _ in range(5)]
                 + [CartaMagicDefense() for _ in range(5)]
                 + [CartaBuilder() for _ in range(5)]
-                + [CartaAddWeapon() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)],
+            ),
+            Baralho(
+                nome="Baralho 3",
+                cartas=[CartaAddBrick() for _ in range(5)]
+                + [CartaKnight() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(5)]
+                + [CartaBuilder() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)],
+            ),
+            Baralho(
+                nome="Baralho 4",
+                cartas=[CartaAddBrick() for _ in range(5)]
+                + [CartaKnight() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(5)]
+                + [CartaBuilder() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)],
+            ),
+            Baralho(
+                nome="Baralho 5",
+                cartas=[CartaAddBrick() for _ in range(5)]
+                + [CartaKnight() for _ in range(5)]
+                + [CartaMagicDefense() for _ in range(5)]
+                + [CartaBuilder() for _ in range(5)]
+                + [CartaAddWeapon() for _ in range(5)],
             ),
         ]
         self.__jogador_em_turno: Jogador = None
@@ -184,7 +209,6 @@ class Cenario:
         elif self.__jogador_vermelho.vencedor() == True:
             result = 'Jogador Vermelho venceu'"""
 
-
     def finaliza_partida(self):
         """Finaliza a partida permitindo iniciar uma nova partida."""
 
@@ -205,21 +229,16 @@ class Cenario:
             self.draw_avisos(pygame.Surface)
 
     def draw_avisos(self, screen: pygame.Surface):
-        if not (self.jogadores_estao_prontos() and self.__partida_em_andamento):
-            if self.__jogador_azul.baralho == None:
-                message = 'Azul'
-            elif self.__jogador_vermelho.baralho == None:
-                message = 'Vermelho'
-            texto = f'Jogador {message} sem baralho'
+        if not (self.jogadores_estao_prontos() and self.partida_em_andamento):
+            if self.__jogador_azul.baralho is None:
+                message = "Azul"
+            elif self.__jogador_vermelho.baralho is None:
+                message = "Vermelho"
+            texto = f"Jogador {message} sem baralho"
             font = pygame.font.SysFont(None, 20)
-            pts_text = font.render(
-                texto, "upheavtt.ttf", (0,0,0)
-            )
-            rect_pts_text = pts_text.get_rect(
-                center=(1300 / 2, 700 / 2)
-            )
+            pts_text = font.render(texto, "upheavtt.ttf", (0, 0, 0))
+            rect_pts_text = pts_text.get_rect(center=(1300 / 2, 700 / 2))
             screen.blit(pts_text, rect_pts_text)
-        
 
     def jogadores_estao_prontos(self) -> bool:
         """Verifica se ambos jogadores estão prontos para começar partida."""
@@ -230,15 +249,11 @@ class Cenario:
         e jogador vencedor.
         """
 
-        if (
-            self.__castelo_vermelho.nivel == 100
-            or self.__castelo_azul.nivel == 0
-        ):
+        nivel_vermelho = self.__castelo_vermelho.nivel
+        nivel_azul = self.__castelo_azul.nivel
+        if nivel_vermelho == 100 or nivel_azul == 0:
             self.__jogador_vermelho.vencedor = True
-        elif (
-            self.__castelo_azul.nivel == 100 or
-            self.__castelo_vermelho.nivel == 0
-        ):
+        elif nivel_azul == 100 or nivel_vermelho == 0:
             self.__jogador_azul.vencedor = True
 
     def draw(self, surface: pygame.Surface):
