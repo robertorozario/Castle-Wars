@@ -43,6 +43,7 @@ class Carta(pygame.Rect):
         cristais: int,
         tijolos: int,
         espadas: int,
+        descricao: str,
     ):
         super().__init__(left, top, CARD_WIDTH, CARD_HEIGHT)
         self._acao = acao
@@ -50,6 +51,7 @@ class Carta(pygame.Rect):
         self._cristais = cristais
         self._espadas = espadas
         self._tijolos = tijolos
+        self._descricao = descricao
 
     @property
     def posicao_inicial(self) -> typing.Tuple:
@@ -71,6 +73,10 @@ class Carta(pygame.Rect):
     def acao(self) -> AcaoCarta:
         return self._acao
 
+    @property
+    def descricao(self) -> str:
+        return self._descricao
+
     def draw(self, screen: pygame.Surface):
         """Draws the card into the pygame screen."""
         # TODO: allow dinamically choose the color from self._tipo
@@ -90,6 +96,7 @@ class CartaTower(Carta):
             cristais=0,
             tijolos=10,
             espadas=0,
+            descricao='Aumenta 10 níveis de seu castelo.'
         )
 
 
@@ -107,6 +114,7 @@ class CartaFireArcher(Carta):
             cristais=0,
             tijolos=0,
             espadas=3,
+            descricao='Diminui 5 níveis do castelo adversário.'
         )
 
 
@@ -124,6 +132,7 @@ class CartaKnight(Carta):
             cristais=0,
             tijolos=0,
             espadas=10,
+            descricao='Ataca o castelo adversário diminuindo 12 níveis dele.'
         )
 
 
@@ -140,6 +149,7 @@ class CartaRecruit(Carta):
             cristais=0,
             espadas=8,
             tijolos=0,
+            descricao='Acrescenta um soldado ao seu castelo.'
         )
 
 
@@ -156,6 +166,7 @@ class CartaBuilder(Carta):
             cristais=0,
             espadas=0,
             tijolos=8,
+            descricao='Acrescenta 1 construtor ao seu castelo.'
         )
 
 
@@ -172,6 +183,7 @@ class CartaTavern(Carta):
             cristais=0,
             espadas=0,
             tijolos=12,
+            descricao='Acrescenta 15 níveis ao seu castelo.'
         )
 
 
@@ -188,6 +200,7 @@ class CartaMage(Carta):
             cristais=8,
             espadas=0,
             tijolos=0,
+            descricao='Acrescenta 1 mago ao seu castelo.'
         )
 
 
@@ -204,6 +217,7 @@ class CartaAddBrick(Carta):
             cristais=5,
             espadas=0,
             tijolos=0,
+            descricao='Acrescenta 8 tijolos ao seu castelo.'
         )
 
 
@@ -220,6 +234,7 @@ class CartaAddWeapon(Carta):
             cristais=5,
             espadas=0,
             tijolos=0,
+            descricao='Acrescenta 8 espadas ao seu castelo.'
         )
 
 
@@ -237,4 +252,5 @@ class CartaMagicDefense(Carta):
             cristais=15,
             espadas=0,
             tijolos=0,
+            descricao='Ativa o buff escudo mágico, impedindo o próximo ataque.'
         )

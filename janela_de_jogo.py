@@ -298,7 +298,14 @@ class JanelaDeJogo:
         # Fonte de texto
         font = pygame.font.Font(FONTE_NAME, 20)
 
-        cartas = cria_cartas_usuario()
+        jogador_em_turno_eh_vermelho = (
+            self.__cenario.jogador_em_turno == self.__cenario.jogador_vermelho
+        )
+        cartas = []
+        if jogador_em_turno_eh_vermelho:
+            cartas = self.__cenario.jogador_vermelho.mao
+        else:
+            cartas = self.__cenario.jogador_azul.mao
 
         castelo_azul = self.__cenario.castelo_azul
         castelo_vermelho = self.__cenario.castelo_vermelho
