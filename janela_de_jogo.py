@@ -262,10 +262,23 @@ class JanelaDeJogo:
 
         font = pygame.font.Font(FONTE_NAME, 20)
 
-        screen.fill(BG_COLOR)
-        pts_text = font.render(
-            "Passe a Vez, Clique Para Continuar", FONTE_NAME, TEXT_COLOR
+        jogador_em_turno_eh_vermelho = (
+            self.__cenario.jogador_em_turno == self.__cenario.jogador_vermelho
         )
+
+        screen.fill(BG_COLOR)
+        if jogador_em_turno_eh_vermelho:
+            pts_text = font.render(
+                "Turno do jogador vermelho, clique para continuar",
+                FONTE_NAME,
+                TEXT_COLOR,
+            )
+        else:
+            pts_text = font.render(
+                "Turno do jogador azul, clique para continuar",
+                FONTE_NAME,
+                TEXT_COLOR,
+            )
         rect_pts_text = pts_text.get_rect(
             center=(
                 SCREEN_WIDTH / 2,
