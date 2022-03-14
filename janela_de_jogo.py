@@ -336,7 +336,7 @@ class JanelaDeJogo:
 
         jogador_em_turno = self.__cenario.jogador_em_turno
         cartas = jogador_em_turno.mao
-        
+
         castelo_azul = self.__cenario.castelo_azul
         castelo_vermelho = self.__cenario.castelo_vermelho
 
@@ -446,56 +446,15 @@ class JanelaDeJogo:
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 # Botão do mouse foi solto, seleciona carta ou ativa botões
-                for carta in self.__hand_group:
-                    if pygame.Rect.colliderect(carta.rect, mouse_rect):
-                        self.__carta_selecionada = carta
+                self._seleciona_cartas()
 
-                if (
-                    ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
-                    and mouse_x <= ((SCREEN_WIDTH / 2) + (103 * 1.2))
-                    and 30 <= mouse_y <= 30 + 60
-                    and self.__tela == Tela.JOGO
-                ):
-                    self.__interface_jogador.passar_turno()
-                    if not self.__cenario.partida_em_andamento:
-                        self.__tela = Tela.INICIAL
-                    else:
-                        self.__tela = Tela.TROCA_DE_TURNO
+                if self._clicou_em_passar_tuno(mouse_x, mouse_y):
+                    self._passa_turno(self)
 
                 elif self.__carta_selecionada is not None:
-                    if (
-                        (225 <= mouse_x <= 375)
-                        and 80 <= mouse_y <= 140
-                        and self.__tela == Tela.JOGO
-                    ):
-                        if (
-                            self.__cenario.obtem_castelo_jogador(
-                                self.__cenario.jogador_em_turno
-                            ).possui_recurso_pra_carta(
-                                self.__carta_selecionada
-                            )
-                            and self.__cenario.jogador_em_turno.cartas_descartadas_no_turno == 0
-                        ):
-                            self.__cenario.obtem_castelo_jogador(
-                                self.__cenario.jogador_em_turno
-                            ).cristais -= self.__carta_selecionada.cristais
-                            self.__cenario.obtem_castelo_jogador(
-                                self.__cenario.jogador_em_turno
-                            ).tijolos -= self.__carta_selecionada.tijolos
-                            self.__cenario.obtem_castelo_jogador(
-                                self.__cenario.jogador_em_turno
-                            ).espadas -= self.__carta_selecionada.espadas
-                            self.__cenario.efetua_acao_da_carta(
-                                self.__carta_selecionada,
-                                self.__cenario.obtem_castelo_jogador(
-                                    self.__cenario.jogador_em_turno
-                                ),
-                            )
-                            self.__interface_jogador.passar_turno()
-                            if not self.__cenario.partida_em_andamento:
-                                self.__tela = Tela.INICIAL
-                            else:
-                                self.__tela = Tela.TROCA_DE_TURNO
+                    if self._clicou_em_jogar_carta(mouse_x, mouse_y):
+                        if self._pode_jogar_carta():
+                            self._jogar_carta()
                         elif (
                             self.__cenario.jogador_em_turno.cartas_descartadas_no_turno
                             > 0
@@ -509,24 +468,89 @@ class JanelaDeJogo:
                                 "Erro",
                                 "Recursos insuficientes.",
                             )
-                    elif (
-                        (898.64 <= mouse_x <= 1106.24)
-                        and 80 <= mouse_y <= 140
-                        and self.__tela == Tela.JOGO
-                    ):
-                        self.__cenario.jogador_em_turno.descartar_carta(
-                            self.__carta_selecionada
-                        )
-                        self.__hand_group.remove(self.__carta_selecionada)
-                        self.__carta_selecionada = None
-                        if self.__cenario.jogador_em_turno.descartou_max_cartas():
-                            self.__interface_jogador.passar_turno()
-                            if not self.__cenario.partida_em_andamento:
-                                self.__tela = Tela.INICIAL
-                            else:
-                                self.__tela = Tela.TROCA_DE_TURNO
+                    elif self._clicou_em_descartar_carta(mouse_x, mouse_y):
+                        self._descarta_carta()
                 else:
                     self.__tela = Tela.JOGO
+
+    def _seleciona_cartas(self, mouse_rect: pygame.Rect):
+        for carta in self.__hand_group:
+            if pygame.Rect.colliderect(carta.rect, mouse_rect):
+                self.__carta_selecionada = carta
+
+    def _clicou_em_passar_tuno(self, mouse_x: int, mouse_y: int) -> bool:
+        return(
+            ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
+            and mouse_x <= ((SCREEN_WIDTH / 2) + (103 * 1.2))
+            and 30 <= mouse_y <= 30 + 60
+            and self.__tela == Tela.JOGO
+        )
+
+    def _clicou_em_jogar_carta(self, mouse_x: int, mouse_y: int) -> bool:
+        return (
+            (225 <= mouse_x <= 375)
+            and 80 <= mouse_y <= 140
+            and self.__tela == Tela.JOGO
+        )
+
+    def _clicou_em_descartar_carta(self, mouse_x: int, mouse_y: int) -> bool:
+        return (
+            (898.64 <= mouse_x <= 1106.24)
+            and 80 <= mouse_y <= 140
+            and self.__tela == Tela.JOGO
+        )
+
+    def _passa_turno(self):
+        self.__interface_jogador.passar_turno()
+        if not self.__cenario.partida_em_andamento:
+            self.__tela = Tela.INICIAL
+        else:
+            self.__tela = Tela.TROCA_DE_TURNO
+
+    def _pode_jogar_carta(self) -> bool:
+        return (
+            self.__cenario.obtem_castelo_jogador(
+                self.__cenario.jogador_em_turno
+            ).possui_recurso_pra_carta(
+                self.__carta_selecionada
+            )
+            and self.__cenario.jogador_em_turno.cartas_descartadas_no_turno == 0
+        )
+
+    def _jogar_carta(self):
+        self.__cenario.obtem_castelo_jogador(
+            self.__cenario.jogador_em_turno
+        ).cristais -= self.__carta_selecionada.cristais
+        self.__cenario.obtem_castelo_jogador(
+            self.__cenario.jogador_em_turno
+        ).tijolos -= self.__carta_selecionada.tijolos
+        self.__cenario.obtem_castelo_jogador(
+            self.__cenario.jogador_em_turno
+        ).espadas -= self.__carta_selecionada.espadas
+        self.__cenario.efetua_acao_da_carta(
+            self.__carta_selecionada,
+            self.__cenario.obtem_castelo_jogador(
+                self.__cenario.jogador_em_turno
+            ),
+        )
+        self.__interface_jogador.passar_turno()
+        if not self.__cenario.partida_em_andamento:
+            self.__tela = Tela.INICIAL
+        else:
+            self.__tela = Tela.TROCA_DE_TURNO
+
+    def _descarta_carta(self):
+        self.__cenario.jogador_em_turno.descartar_carta(
+            self.__carta_selecionada
+        )
+        self.__hand_group.remove(self.__carta_selecionada)
+        self.__carta_selecionada = None
+        if self.__cenario.jogador_em_turno.descartou_max_cartas():
+            self.__interface_jogador.passar_turno()
+            if not self.__cenario.partida_em_andamento:
+                self.__tela = Tela.INICIAL
+            else:
+                self.__tela = Tela.TROCA_DE_TURNO
 
     def _desenha_zona_de_descarte(self, font: pygame.font.Font):
         descarta_texto = font.render("Descartar Carta", False, TEXT_COLOR)
