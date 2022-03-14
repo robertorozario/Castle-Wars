@@ -11,7 +11,7 @@ BG_COLOR = (173, 203, 222)
 ACCENT_COLOR = (145, 145, 145)
 TEXT_COLOR = (38, 40, 41)
 FLOOR_COLOR = (19, 161, 36)
-
+SELECTION_COLOR = (0, 0, 0)
 
 class Tela(Enum):
     INICIAL = 1
@@ -400,6 +400,11 @@ class JanelaDeJogo:
         else:
             screen.blit(font.render("turno do jogador Azul", False, (0,0,0)),(SCREEN_WIDTH/2.4, 100))
 
+        if self.__carta_selecionada is not None:
+            select_left = self.__carta_selecionada.rect.left
+            pygame.draw.rect(self.__screen, SELECTION_COLOR, pygame.Rect(select_left, 545, 134, 150), 4)
+
+
     def ouve_eventos(self, mouse_rect):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         print(self.__carta_selecionada)
@@ -413,7 +418,7 @@ class JanelaDeJogo:
                 for carta in self.__hand_group:
                     if pygame.Rect.colliderect(carta.rect, mouse_rect):
                         self.__carta_selecionada = carta
-
+                    
                 if (
                     ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
                     and mouse_x <= ((SCREEN_WIDTH / 2) + (103 * 1.2))
