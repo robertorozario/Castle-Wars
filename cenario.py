@@ -197,20 +197,25 @@ class Cenario:
     def passa_turno_atual_jogador(self):
         """Passa o turno do atual jogador em turno."""
 
-        jogador_em_turno_eh_vermelho = (
-            self.__jogador_em_turno is self.__jogador_vermelho
-        )
-        if jogador_em_turno_eh_vermelho:
-            self.__jogador_em_turno = self.__jogador_azul
-            self.__jogador_vermelho.em_turno = False
-            self.__jogador_azul.em_turno = True
-            self.__castelo_vermelho.adicionar_recursos()
+        encerrar_partida = self.avalia_encerramento_partida()
+        if encerrar_partida:
+            self.anuncia_vencedor()
+            self.finaliza_partida()
         else:
-            self.__jogador_em_turno = self.__jogador_vermelho
-            self.__jogador_azul.em_turno = False
-            self.__jogador_vermelho.em_turno = True
-            self.__castelo_azul.adicionar_recursos()
-        self.__jogador_em_turno_pronto = False
+            jogador_em_turno_eh_vermelho = (
+                self.__jogador_em_turno is self.__jogador_vermelho
+            )
+            if jogador_em_turno_eh_vermelho:
+                self.__jogador_em_turno = self.__jogador_azul
+                self.__jogador_vermelho.em_turno = False
+                self.__jogador_azul.em_turno = True
+                self.__castelo_vermelho.adicionar_recursos()
+            else:
+                self.__jogador_em_turno = self.__jogador_vermelho
+                self.__jogador_azul.em_turno = False
+                self.__jogador_vermelho.em_turno = True
+                self.__castelo_azul.adicionar_recursos()
+            self.__jogador_em_turno_pronto = False
 
     def anuncia_vencedor(self):
         pass
@@ -246,7 +251,7 @@ class Cenario:
         """Verifica se ambos jogadores estão prontos para começar partida."""
         return self.__jogador_azul.pronto and self.__jogador_vermelho.pronto
 
-    def avalia_encerramento_partida(self):
+    def avalia_encerramento_partida(self) -> bool:
         """Avalia o encerramento da partida verificando se existe um castelo
         e jogador vencedor.
         """
@@ -255,8 +260,11 @@ class Cenario:
         nivel_azul = self.__castelo_azul.nivel
         if nivel_vermelho == 100 or nivel_azul == 0:
             self.__jogador_vermelho.vencedor = True
+            return True
         elif nivel_azul == 100 or nivel_vermelho == 0:
             self.__jogador_azul.vencedor = True
+            return True
+        return False
 
     def draw(self, surface: pygame.Surface):
         pass
