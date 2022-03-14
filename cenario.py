@@ -255,6 +255,7 @@ class Cenario:
         if jogadores_prontos:
             self.__castelo_azul.aplica_configuracao_inicial()
             self.__castelo_vermelho.aplica_configuracao_inicial()
+            self.jogador_em_turno = self.__jogador_azul
             self.__jogador_azul.obtem_mao_jogador()
             self.__jogador_vermelho.obtem_mao_jogador()
             self.__partida_em_andamento = True

@@ -1,9 +1,11 @@
 import pygame
 import sys
+import typing
 
 from enum import Enum
 from pygame._sdl2 import messagebox
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH, FONTE_NAME
+from carta import Carta
 from cenario import Cenario
 from interface_jogador import InterfaceJogador
 
@@ -42,7 +44,6 @@ class JanelaDeJogo:
 
     def inicia_loop_jogo(self):
         self.__loop = True
-        self.__cenario.jogador_em_turno = self.__cenario.jogador_azul
 
         pygame.mixer.pre_init(44100, -16, 2, 512)
         pygame.init()
@@ -333,22 +334,15 @@ class JanelaDeJogo:
         # Fonte de texto
         font = pygame.font.Font(FONTE_NAME, 20)
 
-        jogador_em_turno_eh_vermelho = (
-            self.__cenario.jogador_em_turno == self.__cenario.jogador_vermelho
-        )
-        cartas = []
-        if jogador_em_turno_eh_vermelho:
-            cartas = self.__cenario.jogador_vermelho.mao
-        else:
-            cartas = self.__cenario.jogador_azul.mao
-
+        jogador_em_turno = self.__cenario.jogador_em_turno
+        cartas = jogador_em_turno.mao
+        
         castelo_azul = self.__cenario.castelo_azul
         castelo_vermelho = self.__cenario.castelo_vermelho
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
         mouse_rect = pygame.Rect(mouse_x, mouse_y, 60, 60)
         pygame.draw.rect(self.__screen, "Grey", mouse_rect)
-        self.ouve_eventos(mouse_rect)
 
         # Background Stuff
         screen.fill(BG_COLOR)
@@ -399,22 +393,15 @@ class JanelaDeJogo:
         castelo_vermelho.draw_info(screen)
 
         # Desenha zonas de arraste das cartas.
-        desenha_zona_de_jogo(screen, font)
-        desenha_zona_de_descarte(screen, font)
+        self._desenha_zona_de_jogo(font)
+        self._desenha_zona_de_descarte(font)
 
         # Desenha as cartas da mão do usuário.
-        pos_x = 115
-        pos_y = 620
-        for carta in cartas:
-            if carta.posicao_inicial is None:
-                left = (cartas.index(carta) * 150) + pos_x
-                top = pos_y
-                carta.rect = carta.image.get_rect(center=(left, top))
-                self.__hand_group.add(carta)
-            else:
-                self.__hand_group.add(carta)
-        self.__hand_group.draw(screen)
+        self._desenha_mao_jogador(cartas)
 
+        jogador_em_turno_eh_vermelho = (
+            self.__cenario.jogador_em_turno == self.__cenario.jogador_vermelho
+        )
         if jogador_em_turno_eh_vermelho:
             screen.blit(
                 font.render("turno do jogador Vermelho", False, (0, 0, 0)),
@@ -435,7 +422,22 @@ class JanelaDeJogo:
                 4,
             )
 
-    def ouve_eventos(self, mouse_rect):
+        self.ouve_eventos(mouse_rect)
+
+    def _desenha_mao_jogador(self, cartas: typing.List[Carta]):
+        pos_x = 115
+        pos_y = 620
+        for carta in cartas:
+            if carta.posicao_inicial is None:
+                left = (cartas.index(carta) * 150) + pos_x
+                top = pos_y
+                carta.rect = carta.image.get_rect(center=(left, top))
+                self.__hand_group.add(carta)
+            else:
+                self.__hand_group.add(carta)
+        self.__hand_group.draw(self.__screen)
+
+    def ouve_eventos(self, mouse_rect: pygame.Rect):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -526,71 +528,69 @@ class JanelaDeJogo:
                 else:
                     self.__tela = Tela.JOGO
 
-
-def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
-    descarta_texto = font.render("Descartar Carta", False, TEXT_COLOR)
-    rect_texto = descarta_texto.get_rect(center=(1000, 110))
-    descarta_btn = pygame.Rect(
-        SCREEN_WIDTH - (descarta_texto.get_width() * 2.32),
-        80,
-        descarta_texto.get_width() * 1.2,
-        60,
-    )
-
-    # Highlight do botão de passar turno quando o mouse estiver sobre
-    # ele.
-    mouse_x, mouse_y = pygame.mouse.get_pos()
-    if (
-        (SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)
-        <= mouse_x
-        <= (
-            (SCREEN_WIDTH)
-            - (descarta_texto.get_width() * 2.32)
-            + descarta_texto.get_width() * 1.2
+    def _desenha_zona_de_descarte(self, font: pygame.font.Font):
+        descarta_texto = font.render("Descartar Carta", False, TEXT_COLOR)
+        rect_texto = descarta_texto.get_rect(center=(1000, 110))
+        descarta_btn = pygame.Rect(
+            SCREEN_WIDTH - (descarta_texto.get_width() * 2.32),
+            80,
+            descarta_texto.get_width() * 1.2,
+            60,
         )
-    ) and 80 <= mouse_y <= 80 + 60:
 
-        pygame.draw.rect(
-            screen,
-            (152, 173, 139),
-            descarta_btn,
-            border_radius=10,
-        )
-    else:
-        pygame.draw.rect(
-            screen,
-            (211, 211, 211),
-            descarta_btn,
-            border_radius=10,
-        )
-    screen.blit(descarta_texto, rect_texto)
+        # Highlight do botão de passar turno quando o mouse estiver sobre
+        # ele.
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        if (
+            (SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)
+            <= mouse_x
+            <= (
+                (SCREEN_WIDTH)
+                - (descarta_texto.get_width() * 2.32)
+                + descarta_texto.get_width() * 1.2
+            )
+        ) and 80 <= mouse_y <= 80 + 60:
 
+            pygame.draw.rect(
+                self.__screen,
+                (152, 173, 139),
+                descarta_btn,
+                border_radius=10,
+            )
+        else:
+            pygame.draw.rect(
+                self.__screen,
+                (211, 211, 211),
+                descarta_btn,
+                border_radius=10,
+            )
+        self.__screen.blit(descarta_texto, rect_texto)
 
-def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
-    jogar_texto = font.render("Jogar Carta", False, TEXT_COLOR)
-    rect_texto = jogar_texto.get_rect(center=(300, 110))
-    jogar_btn = pygame.Rect(
-        225,
-        80,
-        jogar_texto.get_width() * 1.2,
-        60,
-    )
-    # Highlight do botão de passar turno quando o mouse estiver sobre
-    # ele.
-    mouse_x, mouse_y = pygame.mouse.get_pos()
-    if ((225) <= mouse_x <= (375)) and 80 <= mouse_y <= 80 + 60:
+    def _desenha_zona_de_jogo(self, font: pygame.font.Font):
+        jogar_texto = font.render("Jogar Carta", False, TEXT_COLOR)
+        rect_texto = jogar_texto.get_rect(center=(300, 110))
+        jogar_btn = pygame.Rect(
+            225,
+            80,
+            jogar_texto.get_width() * 1.2,
+            60,
+        )
+        # Highlight do botão de passar turno quando o mouse estiver sobre
+        # ele.
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        if ((225) <= mouse_x <= (375)) and 80 <= mouse_y <= 80 + 60:
 
-        pygame.draw.rect(
-            screen,
-            (152, 173, 139),
-            jogar_btn,
-            border_radius=10,
-        )
-    else:
-        pygame.draw.rect(
-            screen,
-            (211, 211, 211),
-            jogar_btn,
-            border_radius=10,
-        )
-    screen.blit(jogar_texto, rect_texto)
+            pygame.draw.rect(
+                self.__screen,
+                (152, 173, 139),
+                jogar_btn,
+                border_radius=10,
+            )
+        else:
+            pygame.draw.rect(
+                self.__screen,
+                (211, 211, 211),
+                jogar_btn,
+                border_radius=10,
+            )
+        self.__screen.blit(jogar_texto, rect_texto)
