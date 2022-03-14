@@ -1,4 +1,7 @@
+from re import X
+from tkinter import messagebox
 import pygame
+from pygame._sdl2 import messagebox
 
 from typing import List
 
@@ -224,12 +227,14 @@ class Cenario:
             self.__jogador_em_turno_pronto = False
 
     def anuncia_vencedor(self):
-        pass
-        """
-        if self.__jogador_azul.vencedor() == True:
-            result = 'Jogador Azul venceu'
-        elif self.__jogador_vermelho.vencedor() == True:
-            result = 'Jogador Vermelho venceu'"""
+        if self.__jogador_azul.vencedor == True:
+            vencedor = "Azul"
+        else:
+            vencedor = "Vermelho"
+        messagebox(
+                            f"Jogador {vencedor} vencedor",
+                            f"Jogador {vencedor} venceu a partida!",
+                        )
 
     def finaliza_partida(self):
         """Finaliza a partida permitindo iniciar uma nova partida."""
@@ -264,10 +269,10 @@ class Cenario:
 
         nivel_vermelho = self.__castelo_vermelho.nivel
         nivel_azul = self.__castelo_azul.nivel
-        if nivel_vermelho == 100 or nivel_azul == 0:
+        if nivel_vermelho >= 100 or nivel_azul <= 0:
             self.__jogador_vermelho.vencedor = True
             return True
-        elif nivel_azul == 100 or nivel_vermelho == 0:
+        elif nivel_azul >= 100 or nivel_vermelho <= 0:
             self.__jogador_azul.vencedor = True
             return True
         return False
