@@ -197,20 +197,24 @@ class Cenario:
     def passa_turno_atual_jogador(self):
         """Passa o turno do atual jogador em turno."""
 
-        jogador_em_turno_eh_vermelho = (
-            self.__jogador_em_turno is self.__jogador_vermelho
-        )
-        if jogador_em_turno_eh_vermelho:
-            self.__jogador_em_turno = self.__jogador_azul
-            self.__jogador_vermelho.em_turno = False
-            self.__jogador_azul.em_turno = True
-            self.__castelo_vermelho.adicionar_recursos()
+        encerrar_partida = self.avalia_encerramento_partida()
+        if encerrar_partida:
+            self.anuncia_vencedor()
         else:
-            self.__jogador_em_turno = self.__jogador_vermelho
-            self.__jogador_azul.em_turno = False
-            self.__jogador_vermelho.em_turno = True
-            self.__castelo_azul.adicionar_recursos()
-        self.__jogador_em_turno_pronto = False
+            jogador_em_turno_eh_vermelho = (
+                self.__jogador_em_turno is self.__jogador_vermelho
+            )
+            if jogador_em_turno_eh_vermelho:
+                self.__jogador_em_turno = self.__jogador_azul
+                self.__jogador_vermelho.em_turno = False
+                self.__jogador_azul.em_turno = True
+                self.__castelo_vermelho.adicionar_recursos()
+            else:
+                self.__jogador_em_turno = self.__jogador_vermelho
+                self.__jogador_azul.em_turno = False
+                self.__jogador_vermelho.em_turno = True
+                self.__castelo_azul.adicionar_recursos()
+            self.__jogador_em_turno_pronto = False
 
     def anuncia_vencedor(self):
         pass
