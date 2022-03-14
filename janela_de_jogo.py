@@ -288,6 +288,7 @@ class JanelaDeJogo:
             )
         )
         screen.blit(pts_text, rect_pts_text)
+        self.__hand_group.empty()
         self.ouve_eventos(pygame.Rect(-100, -100, 1, 1))
 
     def _desenha_tela_jogo(self):
@@ -384,60 +385,35 @@ class JanelaDeJogo:
             else:
                 self.__hand_group.add(carta)
         self.__hand_group.draw(screen)
-        print(len(self.__hand_group.sprites()))
 
     def ouve_eventos(self, mouse_rect):
         mouse_x, mouse_y = pygame.mouse.get_pos()
+        print(self.__carta_selecionada)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                # Se o mouse está clicado seleciona a carta que colidiu o
-                # evento.
+            elif event.type == pygame.MOUSEBUTTONUP:
+                # Botão do mouse foi solto, seleciona carta ou ativa botões
                 for carta in self.__hand_group:
                     if pygame.Rect.colliderect(carta.rect, mouse_rect):
                         self.__carta_selecionada = carta
-            elif event.type == pygame.MOUSEBUTTONUP:
-                # Botão do mouse foi solto desceleciona a carta e deixa-a
-                # parada.
                 if self.__carta_selecionada is not None:
-                    """
-                    Rects não tem função pra deletar pelo que eu achei,
-                    então só move cartas pra fora da tela e as condições
-                    para as cartas serem deletadas não leva em consideração
-                    em qual das zonas ela se encontra, apenas se está acima
-                    da área da mão, elaborar isso na versão final
-                    """
-                    if self.__carta_selecionada.rect.y < (
-                        SCREEN_HEIGHT - ((SCREEN_HEIGHT / 4) + 40)
-                    ):
-                        self.__carta_selecionada.rect.x = -200
-                        self.__carta_selecionada.rect.y = 0
-                        self.__carta_selecionada = None
-                    else:
-                        carta_x = self.__carta_selecionada.rect.left
-                        carta_y = self.__carta_selecionada.rect.top
-                        self.__carta_selecionada.rect.left = carta_x
-                        self.__carta_selecionada.rect.top = carta_y
-                        self.__carta_selecionada = None
+                    if (
+                        225 <= mouse_x <= 330
+                       ) and 80 <= mouse_y <= 140:
+                        pass
                 elif (
                     ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
                     and mouse_x <= ((SCREEN_WIDTH / 2) + (103 * 1.2))
                     and 30 <= mouse_y <= 30 + 60
+                    and self.__tela == Tela.JOGO
                 ):
                     self.__tela = Tela.TROCA_DE_TURNO
                     self.__interface_jogador.passar_turno()
                 else:
                     self.__tela = Tela.JOGO
-            elif event.type == pygame.MOUSEMOTION:
-                # No movimento do mouse "arrasta" a carta junto.
-                if self.__carta_selecionada is not None:
-                    botao_esquerdo_pressionado = event.buttons[0]
-                    if botao_esquerdo_pressionado:
-                        pos = pygame.mouse.get_pos()
-                        self.__carta_selecionada.rect.midtop = pos
 
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
@@ -455,6 +431,10 @@ def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
     # Highlight do botão de passar turno quando o mouse estiver sobre
     # ele.
     mouse_x, mouse_y = pygame.mouse.get_pos()
+    #print(((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32) + descarta_texto.get_width() * 1.2)) 1106.24
+    #print((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)) 898.64
+    #print(80) 80
+    # print(80 + 60) 140
     if (
         (SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)
         <= mouse_x
@@ -491,6 +471,10 @@ def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     # Highlight do botão de passar turno quando o mouse estiver sobre
     # ele.
     mouse_x, mouse_y = pygame.mouse.get_pos()
+    # print(225) 225
+    #print(225 + (jogar_texto.get_width() / 1.2)) 330
+    # print(80) 80
+    # print(80 + 60) 140
     if (
         (225)
         <= mouse_x
