@@ -156,13 +156,7 @@ class Castelo:
         possui_cristais = self.__cristais >= carta.cristais
         possui_tijolos = self.__tijolos >= carta.tijolos
         possui_espadas = self.__espadas >= carta.espadas
-        if possui_cristais and possui_tijolos and possui_espadas:
-            self.__cristais -= carta.cristais
-            self.__tijolos -= carta.tijolos
-            self.__espadas -= carta.espadas
-            return True
-        else:
-            return False
+        return possui_cristais and possui_tijolos and possui_espadas
 
     def aplica_configuracao_inicial(self):
         """Aplica a configuração inicial, ou seja, de início de jogo ao Castelo.
