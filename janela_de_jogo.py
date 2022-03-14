@@ -277,7 +277,7 @@ class JanelaDeJogo:
             if self.__carta_selecionada is not None:
                 self.__cenario.jogador_azul.baralho.adiciona_carta(self.__carta_selecionada, 1)
                 self.__cenario.jogador_azul.mao.remove(self.__carta_selecionada)
-                self.__cenario.jogador_azul.obtem_mao_jogador()
+            self.__cenario.jogador_azul.obtem_mao_jogador()
         else:
             pts_text = font.render(
                 "Turno do jogador azul, clique para continuar",
@@ -287,7 +287,7 @@ class JanelaDeJogo:
             if self.__carta_selecionada is not None:
                 self.__cenario.jogador_vermelho.baralho.adiciona_carta(self.__carta_selecionada, 1)
                 self.__cenario.jogador_vermelho.mao.remove(self.__carta_selecionada)
-                self.__cenario.jogador_vermelho.obtem_mao_jogador()
+            self.__cenario.jogador_vermelho.obtem_mao_jogador()
         rect_pts_text = pts_text.get_rect(
             center=(
                 SCREEN_WIDTH / 2,
@@ -442,6 +442,16 @@ class JanelaDeJogo:
                                 "Erro",
                                 "Recursos insuficientes.",
                             )
+                    elif (
+                        898.64 <= mouse_x <= 1106.24
+                       ) and 80 <= mouse_y <= 140\
+                         and self.__tela == Tela.JOGO:
+                        self.__cenario.jogador_em_turno.descartar_carta(self.__carta_selecionada)
+                        self.__carta_selecionada = None
+                        if self.__cenario.jogador_em_turno.descartou_max_cartas():
+                            self.__cenario.jogador_em_turno.cartas_descartadas_no_turno = 0
+                            self.__tela = Tela.TROCA_DE_TURNO
+                            self.__interface_jogador.passar_turno()
                 else:
                     self.__tela = Tela.JOGO
 
@@ -461,10 +471,6 @@ def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
     # Highlight do botão de passar turno quando o mouse estiver sobre
     # ele.
     mouse_x, mouse_y = pygame.mouse.get_pos()
-    #print(((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32) + descarta_texto.get_width() * 1.2)) 1106.24
-    #print((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)) 898.64
-    #print(80) 80
-    # print(80 + 60) 140
     if (
         (SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)
         <= mouse_x

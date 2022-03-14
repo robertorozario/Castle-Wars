@@ -82,7 +82,7 @@ class Jogador:
     def cartas_descartadas_no_turno(self, cartas_descartadas_no_turno: int):
         self.__cartas_descartadas_no_turno = cartas_descartadas_no_turno
 
-    def descartar_carta(self, indice: int):
+    def descartar_carta(self, carta: Carta):
         """Descarta um carta da mão do usuário.
 
         Parameters
@@ -90,7 +90,9 @@ class Jogador:
         indice : int
             O índice da carta na mão a descartar.
         """
-        self.__mao.pop(indice)
+        self.__mao.remove(carta)
+        self.baralho.adiciona_carta(carta, 1)
+        self.__cartas_descartadas_no_turno += 1
 
     def obtem_carta_da_mao(self, indice: int) -> Carta:
         """Obtem informação de uma carta da mão do Jogador.
