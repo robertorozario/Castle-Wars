@@ -274,13 +274,20 @@ class JanelaDeJogo:
                 FONTE_NAME,
                 TEXT_COLOR,
             )
-            self.__cenario.jogador_azul.baralho.adiciona_carta(self.__carta_selecionada, 1)
+            if self.__carta_selecionada is not None:
+                self.__cenario.jogador_azul.baralho.adiciona_carta(self.__carta_selecionada, 1)
+                self.__cenario.jogador_azul.mao.remove(self.__carta_selecionada)
+                self.__cenario.jogador_azul.obtem_mao_jogador()
         else:
             pts_text = font.render(
                 "Turno do jogador azul, clique para continuar",
                 FONTE_NAME,
                 TEXT_COLOR,
             )
+            if self.__carta_selecionada is not None:
+                self.__cenario.jogador_vermelho.baralho.adiciona_carta(self.__carta_selecionada, 1)
+                self.__cenario.jogador_vermelho.mao.remove(self.__carta_selecionada)
+                self.__cenario.jogador_vermelho.obtem_mao_jogador()
         rect_pts_text = pts_text.get_rect(
             center=(
                 SCREEN_WIDTH / 2,
