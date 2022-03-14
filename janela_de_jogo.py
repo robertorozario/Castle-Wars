@@ -275,7 +275,7 @@ class JanelaDeJogo:
                 TEXT_COLOR,
             )
             if self.__carta_selecionada is not None:
-                self.__cenario.jogador_azul.baralho.adiciona_carta(self.__carta_selecionada, 1)
+                self.__cenario.jogador_azul.baralho.adiciona_carta(self.__carta_selecionada.acao, 1)
                 self.__cenario.jogador_azul.mao.remove(self.__carta_selecionada)
             self.__cenario.jogador_azul.obtem_mao_jogador()
             self.__cenario.jogador_azul.cartas_descartadas_no_turno = 0
@@ -286,7 +286,7 @@ class JanelaDeJogo:
                 TEXT_COLOR,
             )
             if self.__carta_selecionada is not None:
-                self.__cenario.jogador_vermelho.baralho.adiciona_carta(self.__carta_selecionada, 1)
+                self.__cenario.jogador_vermelho.baralho.adiciona_carta(self.__carta_selecionada.acao, 1)
                 self.__cenario.jogador_vermelho.mao.remove(self.__carta_selecionada)
             self.__cenario.jogador_vermelho.obtem_mao_jogador()
             self.__cenario.jogador_vermelho.cartas_descartadas_no_turno = 0
@@ -409,7 +409,6 @@ class JanelaDeJogo:
 
     def ouve_eventos(self, mouse_rect):
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        print(self.__carta_selecionada)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -429,6 +428,8 @@ class JanelaDeJogo:
                 ):
                     self.__tela = Tela.TROCA_DE_TURNO
                     self.__interface_jogador.passar_turno()
+                    if not self.__cenario.partida_em_andamento:
+                        self.__tela = Tela.INICIAL
 
                 elif self.__carta_selecionada is not None:
                     if (
@@ -518,10 +519,6 @@ def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     # Highlight do botão de passar turno quando o mouse estiver sobre
     # ele.
     mouse_x, mouse_y = pygame.mouse.get_pos()
-    # print(225) 225
-    #print(225 + (jogar_texto.get_width() / 1.2)) 330
-    # print(80) 80
-    # print(80 + 60) 140
     if (
         (225)
         <= mouse_x

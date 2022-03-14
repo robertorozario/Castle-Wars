@@ -91,7 +91,7 @@ class Jogador:
             O índice da carta na mão a descartar.
         """
         self.__mao.remove(carta)
-        self.baralho.adiciona_carta(carta, 1)
+        self.baralho.adiciona_carta(carta.acao, 1)
         self.__cartas_descartadas_no_turno += 1
 
     def obtem_carta_da_mao(self, indice: int) -> Carta:
