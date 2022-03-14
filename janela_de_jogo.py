@@ -1,10 +1,8 @@
 import pygame
-import typing
 import sys
 
 from enum import Enum
 from pygame._sdl2 import messagebox
-from carta import Carta
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH, FONTE_NAME
 from cenario import Cenario
 from interface_jogador import InterfaceJogador
@@ -198,14 +196,22 @@ class JanelaDeJogo:
             screen.blit(texto_baralho, rect_texto_baralho)
 
         screen.blit(
-            font.render("Escolha baralho do jogador azul", False, (255,255,255)),
+            font.render(
+                "Escolha baralho do jogador azul",
+                False,
+                (
+                    255,
+                    255,
+                    255,
+                ),
+            ),
             (32, 32),
         )
 
         texto_escolha_vermelho = font.render(
             "Escolha baralho do jogador vermelho",
             False,
-            (255,255,255),
+            (255, 255, 255),
         )
         screen.blit(
             texto_escolha_vermelho,
@@ -313,9 +319,6 @@ class JanelaDeJogo:
         castelo_azul = self.__cenario.castelo_azul
         castelo_vermelho = self.__cenario.castelo_vermelho
 
-        #Grupo de Sprites pra desenhar mão do jogador
-        hand_group = pygame.sprite.Group()
-
         mouse_x, mouse_y = pygame.mouse.get_pos()
         mouse_rect = pygame.Rect(mouse_x, mouse_y, 60, 60)
         pygame.draw.rect(self.__screen, "Grey", mouse_rect)
@@ -400,9 +403,7 @@ class JanelaDeJogo:
                     if pygame.Rect.colliderect(carta.rect, mouse_rect):
                         self.__carta_selecionada = carta
                 if self.__carta_selecionada is not None:
-                    if (
-                        225 <= mouse_x <= 330
-                       ) and 80 <= mouse_y <= 140:
+                    if (225 <= mouse_x <= 330) and 80 <= mouse_y <= 140:
                         pass
                 elif (
                     ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
@@ -418,11 +419,9 @@ class JanelaDeJogo:
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
     descarta_texto = font.render("Descartar Carta", False, TEXT_COLOR)
-    rect_texto = descarta_texto.get_rect(
-        center=(1000, 110)
-    )
+    rect_texto = descarta_texto.get_rect(center=(1000, 110))
     descarta_btn = pygame.Rect(
-        SCREEN_WIDTH - (descarta_texto.get_width() *2.32),
+        SCREEN_WIDTH - (descarta_texto.get_width() * 2.32),
         80,
         descarta_texto.get_width() * 1.2,
         60,
@@ -431,14 +430,14 @@ def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
     # Highlight do botão de passar turno quando o mouse estiver sobre
     # ele.
     mouse_x, mouse_y = pygame.mouse.get_pos()
-    #print(((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32) + descarta_texto.get_width() * 1.2)) 1106.24
-    #print((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)) 898.64
-    #print(80) 80
-    # print(80 + 60) 140
     if (
         (SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)
         <= mouse_x
-        <= ((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32) + descarta_texto.get_width() * 1.2)
+        <= (
+            (SCREEN_WIDTH)
+            - (descarta_texto.get_width() * 2.32)
+            + descarta_texto.get_width() * 1.2
+        )
     ) and 80 <= mouse_y <= 80 + 60:
 
         pygame.draw.rect(
@@ -459,9 +458,7 @@ def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
 
 def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     jogar_texto = font.render("Jogar Carta", False, TEXT_COLOR)
-    rect_texto = jogar_texto.get_rect(
-        center=(300, 110)
-    )
+    rect_texto = jogar_texto.get_rect(center=(300, 110))
     jogar_btn = pygame.Rect(
         225,
         80,
@@ -472,13 +469,11 @@ def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     # ele.
     mouse_x, mouse_y = pygame.mouse.get_pos()
     # print(225) 225
-    #print(225 + (jogar_texto.get_width() / 1.2)) 330
+    # print(225 + (jogar_texto.get_width() / 1.2)) 330
     # print(80) 80
     # print(80 + 60) 140
     if (
-        (225)
-        <= mouse_x
-        <= (225 + (jogar_texto.get_width() / 1.2))
+        (225) <= mouse_x <= (225 + (jogar_texto.get_width() / 1.2))
     ) and 80 <= mouse_y <= 80 + 60:
 
         pygame.draw.rect(

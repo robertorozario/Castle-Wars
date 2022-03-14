@@ -82,7 +82,7 @@ class Jogador:
     def cartas_descartadas_no_turno(self, cartas_descartadas_no_turno: int):
         self.__cartas_descartadas_no_turno = cartas_descartadas_no_turno
 
-    def descarta_carta(self, indice: int):
+    def descartar_carta(self, indice: int):
         """Descarta um carta da mão do usuário.
 
         Parameters
@@ -126,6 +126,13 @@ class Jogador:
             O índice da carta na mão para jogar.
         """
         self.__mao.pop(indice)
+
+    def obtem_mao_jogador(self):
+        """Este método obtem cartas para completar o máximo de cartas na mão do
+        jogador, que são 8."""
+        while len(self.__mao) < 8:
+            carta = self.__baralho.obtem_carta_aleatoria()
+            self.__mao.append(carta)
 
     def reset(self):
         """Reinicia os atributos do Jogador para o mesmo estado de

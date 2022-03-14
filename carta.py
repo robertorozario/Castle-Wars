@@ -2,8 +2,6 @@ import pygame
 
 from enum import Enum
 
-from constants import CARD_HEIGHT, CARD_WIDTH
-
 
 class AcaoCarta(Enum):
     TOWER = 1
@@ -41,21 +39,19 @@ class Carta(pygame.sprite.Sprite):
         tijolos: int,
         espadas: int,
         descricao: str,
-        x_pos,
-        y_pos,
-        path,
+        x_pos: int,
+        y_pos: int,
+        path: str,
     ):
         super().__init__()
-        self.image = pygame.image.load(path)
-        self.rect = self.image.get_rect(center=(x_pos, y_pos))
         self._acao = acao
         self._cristais = cristais
         self._espadas = espadas
         self._tijolos = tijolos
         self._descricao = descricao
         self._posicao_inicial = None
-        self.image = pygame.image.load(path)
-        self.rect = self.image.get_rect(center=(x_pos, y_pos))
+        self._image: pygame.Surface = pygame.image.load(path)
+        self._rect: pygame.Rect = self.image.get_rect(center=(x_pos, y_pos))
 
     @property
     def espadas(self) -> int:
@@ -81,20 +77,21 @@ class Carta(pygame.sprite.Sprite):
     def posicao_inicial(self):
         return self._posicao_inicial
 
-    '''def draw(self, screen: pygame.Surface, top: int, left: int):
-        """Draws the card into the pygame screen."""
-        # TODO: allow dinamically choose the color from self._tipo
-        if self._posicao_inicial is None:
-            self._posicao_inicial = (left, top)
-        self.top = top
-        self.left = left
-        self.height = CARD_HEIGHT
-        self.width = CARD_WIDTH
-        pygame.draw.rect(
-            screen,
-            125,
-            self,
-        )'''
+    @property
+    def image(self) -> pygame.Surface:
+        return self._image
+
+    @image.setter
+    def image(self, image: pygame.Surface):
+        self._image = image
+
+    @property
+    def rect(self) -> pygame.Rect:
+        return self._rect
+
+    @rect.setter
+    def rect(self, rect: pygame.Rect):
+        self._rect = rect
 
 
 class CartaTower(Carta):
