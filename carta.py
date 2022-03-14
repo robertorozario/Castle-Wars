@@ -108,7 +108,7 @@ class CartaTower(Carta):
             descricao="Aumenta 10 níveis de seu castelo.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Tower.png",
         )
 
 
@@ -127,7 +127,7 @@ class CartaFireArcher(Carta):
             descricao="Diminui 5 níveis do castelo adversário.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Fire_Archer.png",
         )
 
 
@@ -146,7 +146,7 @@ class CartaKnight(Carta):
             descricao="Ataca o castelo adversário diminuindo 12 níveis dele.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Knight.png",
         )
 
 
@@ -164,7 +164,7 @@ class CartaRecruit(Carta):
             descricao="Acrescenta um soldado ao seu castelo.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Recruit.png",
         )
 
 
@@ -182,7 +182,7 @@ class CartaBuilder(Carta):
             descricao="Acrescenta 1 construtor ao seu castelo.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Builder.png",
         )
 
 
@@ -200,7 +200,7 @@ class CartaTavern(Carta):
             descricao="Acrescenta 15 níveis ao seu castelo.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Tavern.png",
         )
 
 
@@ -218,7 +218,7 @@ class CartaMage(Carta):
             descricao="Acrescenta 1 mago ao seu castelo.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Mage.png",
         )
 
 
@@ -236,7 +236,7 @@ class CartaAddBrick(Carta):
             descricao="Acrescenta 8 tijolos ao seu castelo.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Add_Bricks.png",
         )
 
 
@@ -254,7 +254,7 @@ class CartaAddWeapon(Carta):
             descricao="Acrescenta 8 espadas ao seu castelo.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Add_Weapon.png",
         )
 
 
@@ -273,5 +273,5 @@ class CartaMagicDefense(Carta):
             descricao="Ativa o buff escudo mágico, impedindo o próximo ataque.",
             x_pos=0,
             y_pos=0,
-            path="Carta_Template.png",
+            path="Carta_Magic_Defense.png",
         )
