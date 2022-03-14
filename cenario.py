@@ -231,9 +231,7 @@ class Cenario:
             vencedor = "Azul"
         else:
             vencedor = "Vermelho"
-        self.__jogador_azul.baralho = None
         self.__jogador_azul.vencedor = False
-        self.__jogador_vermelho.baralho = None
         self.__jogador_vermelho.vencedor = False
         messagebox(
                             f"Jogador {vencedor} vencedor",

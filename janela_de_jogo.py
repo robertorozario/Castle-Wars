@@ -426,10 +426,11 @@ class JanelaDeJogo:
                     and 30 <= mouse_y <= 30 + 60
                     and self.__tela == Tela.JOGO
                 ):
-                    self.__tela = Tela.TROCA_DE_TURNO
                     self.__interface_jogador.passar_turno()
                     if not self.__cenario.partida_em_andamento:
                         self.__tela = Tela.INICIAL
+                    else:
+                        self.__tela = Tela.TROCA_DE_TURNO
 
                 elif self.__carta_selecionada is not None:
                     if (
@@ -442,8 +443,11 @@ class JanelaDeJogo:
                             self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno).tijolos -= self.__carta_selecionada.tijolos
                             self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno).espadas -= self.__carta_selecionada.espadas
                             self.__cenario.efetua_acao_da_carta(self.__carta_selecionada, self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno))
-                            self.__tela = Tela.TROCA_DE_TURNO
                             self.__interface_jogador.passar_turno()
+                            if not self.__cenario.partida_em_andamento:
+                                self.__tela = Tela.INICIAL
+                            else:
+                                self.__tela = Tela.TROCA_DE_TURNO
                         elif (self.__cenario.jogador_em_turno.cartas_descartadas_no_turno > 0):
                             messagebox(
                                 "Erro",
@@ -462,8 +466,11 @@ class JanelaDeJogo:
                         self.__hand_group.remove(self.__carta_selecionada)
                         self.__carta_selecionada = None
                         if self.__cenario.jogador_em_turno.descartou_max_cartas():
-                            self.__tela = Tela.TROCA_DE_TURNO
                             self.__interface_jogador.passar_turno()
+                            if not self.__cenario.partida_em_andamento:
+                                self.__tela = Tela.INICIAL
+                            else:
+                                self.__tela = Tela.TROCA_DE_TURNO
                 else:
                     self.__tela = Tela.JOGO
 
