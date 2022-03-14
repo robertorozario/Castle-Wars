@@ -10,7 +10,7 @@ from cenario import Cenario
 from interface_jogador import InterfaceJogador
 
 BG_COLOR = (173, 203, 222)
-ACCENT_COLOR = (15, 97, 20)
+ACCENT_COLOR = (145, 145, 145)
 TEXT_COLOR = (38, 40, 41)
 FLOOR_COLOR = (19, 161, 36)
 
@@ -113,7 +113,7 @@ class JanelaDeJogo:
             ) and baralho.nome == self.__cenario.jogador_azul.baralho.nome:
                 pygame.draw.rect(
                     screen,
-                    (0, 0, 204),
+                    (86, 86, 232),
                     botao_baralho,
                     border_radius=10,
                 )
@@ -152,7 +152,7 @@ class JanelaDeJogo:
             ) and baralho.nome == self.__cenario.jogador_vermelho.baralho.nome:
                 pygame.draw.rect(
                     screen,
-                    (204, 0, 0),
+                    (230, 80, 80),
                     botao_baralho,
                     border_radius=10,
                 )
@@ -309,7 +309,8 @@ class JanelaDeJogo:
             cartas = self.__cenario.jogador_vermelho.mao
         else:
             cartas = self.__cenario.jogador_azul.mao
-
+            
+        
         castelo_azul = self.__cenario.castelo_azul
         castelo_vermelho = self.__cenario.castelo_vermelho
 
@@ -386,6 +387,11 @@ class JanelaDeJogo:
                 self.__hand_group.add(carta)
         self.__hand_group.draw(screen)
 
+        if jogador_em_turno_eh_vermelho:
+            screen.blit(font.render("turno do jogador Vermelho", False, (0,0,0)),(SCREEN_WIDTH/2.5, 100))
+        else:
+            screen.blit(font.render("turno do jogador Azul", False, (0,0,0)),(SCREEN_WIDTH/2.4, 100))
+
     def ouve_eventos(self, mouse_rect):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         print(self.__carta_selecionada)
@@ -393,7 +399,7 @@ class JanelaDeJogo:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
+            
             elif event.type == pygame.MOUSEBUTTONUP:
                 # Botão do mouse foi solto, seleciona carta ou ativa botões
                 for carta in self.__hand_group:
@@ -404,7 +410,7 @@ class JanelaDeJogo:
                         225 <= mouse_x <= 330
                        ) and 80 <= mouse_y <= 140:
                         pass
-                elif (
+                if (
                     ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
                     and mouse_x <= ((SCREEN_WIDTH / 2) + (103 * 1.2))
                     and 30 <= mouse_y <= 30 + 60
