@@ -278,9 +278,3 @@ class Cenario:
             self.__jogador_azul.vencedor = True
             return True
         return False
-
-    def draw(self, surface: pygame.Surface):
-        pass
-
-    def draw_initial_screen(self, surface: pygame.Surface):
-        pass
