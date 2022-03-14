@@ -1,7 +1,6 @@
-from re import X
-from tkinter import messagebox
-import pygame
 from pygame._sdl2 import messagebox
+
+import pygame
 
 from typing import List
 
@@ -227,7 +226,7 @@ class Cenario:
             self.__jogador_em_turno_pronto = False
 
     def anuncia_vencedor(self):
-        if self.__jogador_azul.vencedor == True:
+        if self.__jogador_azul.vencedor:
             vencedor = "Azul"
         else:
             vencedor = "Vermelho"

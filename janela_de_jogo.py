@@ -13,6 +13,7 @@ TEXT_COLOR = (38, 40, 41)
 FLOOR_COLOR = (19, 161, 36)
 SELECTION_COLOR = (0, 0, 0)
 
+
 class Tela(Enum):
     INICIAL = 1
     JOGO = 2
@@ -51,6 +52,9 @@ class JanelaDeJogo:
 
         while self.__loop:
 
+            if not self.__cenario.partida_em_andamento:
+                self.__tela = Tela.INICIAL
+
             if self.__tela is Tela.INICIAL:
                 self._desenha_tela_inicial()
             elif self.__tela is Tela.JOGO:
@@ -64,6 +68,8 @@ class JanelaDeJogo:
 
     def _desenha_tela_inicial(self):
         screen = self.__screen
+
+        screen.fill((0, 0, 0))
 
         font = pygame.font.Font(FONTE_NAME, 30)
 
@@ -197,14 +203,22 @@ class JanelaDeJogo:
             screen.blit(texto_baralho, rect_texto_baralho)
 
         screen.blit(
-            font.render("Escolha baralho do jogador azul", False, (255,255,255)),
+            font.render(
+                "Escolha baralho do jogador azul",
+                False,
+                (
+                    255,
+                    255,
+                    255,
+                ),
+            ),
             (32, 32),
         )
 
         texto_escolha_vermelho = font.render(
             "Escolha baralho do jogador vermelho",
             False,
-            (255,255,255),
+            (255, 255, 255),
         )
         screen.blit(
             texto_escolha_vermelho,
@@ -275,8 +289,12 @@ class JanelaDeJogo:
                 TEXT_COLOR,
             )
             if self.__carta_selecionada is not None:
-                self.__cenario.jogador_azul.baralho.adiciona_carta(self.__carta_selecionada.acao, 1)
-                self.__cenario.jogador_azul.mao.remove(self.__carta_selecionada)
+                self.__cenario.jogador_azul.baralho.adiciona_carta(
+                    self.__carta_selecionada.acao, 1
+                )
+                self.__cenario.jogador_azul.mao.remove(
+                    self.__carta_selecionada
+                )
             self.__cenario.jogador_azul.obtem_mao_jogador()
             self.__cenario.jogador_azul.cartas_descartadas_no_turno = 0
         else:
@@ -286,8 +304,12 @@ class JanelaDeJogo:
                 TEXT_COLOR,
             )
             if self.__carta_selecionada is not None:
-                self.__cenario.jogador_vermelho.baralho.adiciona_carta(self.__carta_selecionada.acao, 1)
-                self.__cenario.jogador_vermelho.mao.remove(self.__carta_selecionada)
+                self.__cenario.jogador_vermelho.baralho.adiciona_carta(
+                    self.__carta_selecionada.acao, 1
+                )
+                self.__cenario.jogador_vermelho.mao.remove(
+                    self.__carta_selecionada
+                )
             self.__cenario.jogador_vermelho.obtem_mao_jogador()
             self.__cenario.jogador_vermelho.cartas_descartadas_no_turno = 0
         rect_pts_text = pts_text.get_rect(
@@ -320,12 +342,8 @@ class JanelaDeJogo:
         else:
             cartas = self.__cenario.jogador_azul.mao
 
-
         castelo_azul = self.__cenario.castelo_azul
         castelo_vermelho = self.__cenario.castelo_vermelho
-
-        #Grupo de Sprites pra desenhar mão do jogador
-        hand_group = pygame.sprite.Group()
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
         mouse_rect = pygame.Rect(mouse_x, mouse_y, 60, 60)
@@ -398,14 +416,24 @@ class JanelaDeJogo:
         self.__hand_group.draw(screen)
 
         if jogador_em_turno_eh_vermelho:
-            screen.blit(font.render("turno do jogador Vermelho", False, (0,0,0)),(SCREEN_WIDTH/2.5, 100))
+            screen.blit(
+                font.render("turno do jogador Vermelho", False, (0, 0, 0)),
+                (SCREEN_WIDTH / 2.5, 100),
+            )
         else:
-            screen.blit(font.render("turno do jogador Azul", False, (0,0,0)),(SCREEN_WIDTH/2.4, 100))
+            screen.blit(
+                font.render("turno do jogador Azul", False, (0, 0, 0)),
+                (SCREEN_WIDTH / 2.4, 100),
+            )
 
         if self.__carta_selecionada is not None:
             select_left = self.__carta_selecionada.rect.left
-            pygame.draw.rect(self.__screen, SELECTION_COLOR, pygame.Rect(select_left, 545, 134, 150), 4)
-
+            pygame.draw.rect(
+                self.__screen,
+                SELECTION_COLOR,
+                pygame.Rect(select_left, 545, 134, 150),
+                4,
+            )
 
     def ouve_eventos(self, mouse_rect):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -434,21 +462,42 @@ class JanelaDeJogo:
 
                 elif self.__carta_selecionada is not None:
                     if (
-                        225 <= mouse_x <= 375
-                       ) and 80 <= mouse_y <= 140\
-                         and self.__tela == Tela.JOGO:
-                        if (self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno).possui_recurso_pra_carta(self.__carta_selecionada)
-                            and self.__cenario.jogador_em_turno.cartas_descartadas_no_turno == 0):
-                            self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno).cristais -= self.__carta_selecionada.cristais
-                            self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno).tijolos -= self.__carta_selecionada.tijolos
-                            self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno).espadas -= self.__carta_selecionada.espadas
-                            self.__cenario.efetua_acao_da_carta(self.__carta_selecionada, self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno))
+                        (225 <= mouse_x <= 375)
+                        and 80 <= mouse_y <= 140
+                        and self.__tela == Tela.JOGO
+                    ):
+                        if (
+                            self.__cenario.obtem_castelo_jogador(
+                                self.__cenario.jogador_em_turno
+                            ).possui_recurso_pra_carta(
+                                self.__carta_selecionada
+                            )
+                            and self.__cenario.jogador_em_turno.cartas_descartadas_no_turno == 0
+                        ):
+                            self.__cenario.obtem_castelo_jogador(
+                                self.__cenario.jogador_em_turno
+                            ).cristais -= self.__carta_selecionada.cristais
+                            self.__cenario.obtem_castelo_jogador(
+                                self.__cenario.jogador_em_turno
+                            ).tijolos -= self.__carta_selecionada.tijolos
+                            self.__cenario.obtem_castelo_jogador(
+                                self.__cenario.jogador_em_turno
+                            ).espadas -= self.__carta_selecionada.espadas
+                            self.__cenario.efetua_acao_da_carta(
+                                self.__carta_selecionada,
+                                self.__cenario.obtem_castelo_jogador(
+                                    self.__cenario.jogador_em_turno
+                                ),
+                            )
                             self.__interface_jogador.passar_turno()
                             if not self.__cenario.partida_em_andamento:
                                 self.__tela = Tela.INICIAL
                             else:
                                 self.__tela = Tela.TROCA_DE_TURNO
-                        elif (self.__cenario.jogador_em_turno.cartas_descartadas_no_turno > 0):
+                        elif (
+                            self.__cenario.jogador_em_turno.cartas_descartadas_no_turno
+                            > 0
+                        ):
                             messagebox(
                                 "Erro",
                                 "Não pode fazer jogadas, já está descartando.",
@@ -459,10 +508,13 @@ class JanelaDeJogo:
                                 "Recursos insuficientes.",
                             )
                     elif (
-                        898.64 <= mouse_x <= 1106.24
-                       ) and 80 <= mouse_y <= 140\
-                         and self.__tela == Tela.JOGO:
-                        self.__cenario.jogador_em_turno.descartar_carta(self.__carta_selecionada)
+                        (898.64 <= mouse_x <= 1106.24)
+                        and 80 <= mouse_y <= 140
+                        and self.__tela == Tela.JOGO
+                    ):
+                        self.__cenario.jogador_em_turno.descartar_carta(
+                            self.__carta_selecionada
+                        )
                         self.__hand_group.remove(self.__carta_selecionada)
                         self.__carta_selecionada = None
                         if self.__cenario.jogador_em_turno.descartou_max_cartas():
@@ -477,11 +529,9 @@ class JanelaDeJogo:
 
 def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
     descarta_texto = font.render("Descartar Carta", False, TEXT_COLOR)
-    rect_texto = descarta_texto.get_rect(
-        center=(1000, 110)
-    )
+    rect_texto = descarta_texto.get_rect(center=(1000, 110))
     descarta_btn = pygame.Rect(
-        SCREEN_WIDTH - (descarta_texto.get_width() *2.32),
+        SCREEN_WIDTH - (descarta_texto.get_width() * 2.32),
         80,
         descarta_texto.get_width() * 1.2,
         60,
@@ -493,7 +543,11 @@ def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
     if (
         (SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32)
         <= mouse_x
-        <= ((SCREEN_WIDTH) - (descarta_texto.get_width() * 2.32) + descarta_texto.get_width() * 1.2)
+        <= (
+            (SCREEN_WIDTH)
+            - (descarta_texto.get_width() * 2.32)
+            + descarta_texto.get_width() * 1.2
+        )
     ) and 80 <= mouse_y <= 80 + 60:
 
         pygame.draw.rect(
@@ -514,9 +568,7 @@ def desenha_zona_de_descarte(screen: pygame.Surface, font: pygame.font.Font):
 
 def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     jogar_texto = font.render("Jogar Carta", False, TEXT_COLOR)
-    rect_texto = jogar_texto.get_rect(
-        center=(300, 110)
-    )
+    rect_texto = jogar_texto.get_rect(center=(300, 110))
     jogar_btn = pygame.Rect(
         225,
         80,
@@ -526,11 +578,7 @@ def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     # Highlight do botão de passar turno quando o mouse estiver sobre
     # ele.
     mouse_x, mouse_y = pygame.mouse.get_pos()
-    if (
-        (225)
-        <= mouse_x
-        <= (375)
-    ) and 80 <= mouse_y <= 80 + 60:
+    if ((225) <= mouse_x <= (375)) and 80 <= mouse_y <= 80 + 60:
 
         pygame.draw.rect(
             screen,
