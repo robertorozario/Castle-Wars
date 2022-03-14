@@ -23,9 +23,26 @@ class InterfaceJogador:
 
     def jogar_carta(self, indice: int):
         if self.__jogador_azul.em_turno:
-            self.__jogador_azul.jogar_carta(indice)
+            carta = self.__jogador_azul.obtem_carta_da_mao(indice)
+            castelo_azul = self.__cenario.castelo_azul
+            possui_recursos = castelo_azul.possui_recurso_pra_carta(carta)
+            if possui_recursos:
+                self.__jogador_azul.jogar_carta(indice)
+                self.__cenario.efetua_acao_da_carta(
+                    carta,
+                    self.__cenario.castelo_azul,
+                )
         else:
-            self.__jogador_vermelho.jogar_carta(indice)
+            carta = self.__jogador_vermelho.obtem_carta_da_mao(indice)
+            castelo_vermelho = self.__cenario.castelo_vermelho
+            possui_recursos = castelo_vermelho.possui_recurso_pra_carta(carta)
+            if possui_recursos:
+                self.__jogador_vermelho.jogar_carta(indice)
+                self.__cenario.efetua_acao_da_carta(
+                    carta,
+                    self.__cenario.castelo_vermelho,
+                )
+        self.__cenario.passa_turno_atual_jogador()
 
     def descartar_carta(self, indice: int):
         if self.__jogador_azul.em_turno:
@@ -46,7 +63,7 @@ class InterfaceJogador:
     def seleciona_baralho(self, indice: int, lado: str):
         baralho = self.__cenario.baralhos_padrao[indice]
         baralho_copia = baralho.copia()
-        if lado == 'azul':
+        if lado == "azul":
             self.__jogador_azul.baralho = baralho_copia
         else:
             self.__jogador_vermelho.baralho = baralho_copia

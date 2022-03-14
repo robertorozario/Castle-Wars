@@ -43,7 +43,6 @@ class JanelaDeJogo:
 
     def inicia_loop_jogo(self):
         self.__loop = True
-        self.__cenario.jogador_em_turno = self.__cenario.jogador_azul
 
         pygame.mixer.pre_init(44100, -16, 2, 512)
         pygame.init()
@@ -276,7 +275,6 @@ class JanelaDeJogo:
                 FONTE_NAME,
                 TEXT_COLOR,
             )
-            self.__cenario.jogador_azul.baralho.adiciona_carta(self.__carta_selecionada, 1)
         else:
             pts_text = font.render(
                 "Turno do jogador azul, clique para continuar",
@@ -291,7 +289,6 @@ class JanelaDeJogo:
         )
         screen.blit(pts_text, rect_pts_text)
         self.__hand_group.empty()
-        self.__carta_selecionada = None
         self.ouve_eventos(pygame.Rect(-100, -100, 1, 1))
 
     def _desenha_tela_jogo(self):
@@ -408,7 +405,11 @@ class JanelaDeJogo:
                 for carta in self.__hand_group:
                     if pygame.Rect.colliderect(carta.rect, mouse_rect):
                         self.__carta_selecionada = carta
-
+                if self.__carta_selecionada is not None:
+                    if (
+                        225 <= mouse_x <= 330
+                       ) and 80 <= mouse_y <= 140:
+                        pass
                 if (
                     ((SCREEN_WIDTH / 2) - (103 / 1.65)) <= mouse_x
                     and mouse_x <= ((SCREEN_WIDTH / 2) + (103 * 1.2))
@@ -417,21 +418,6 @@ class JanelaDeJogo:
                 ):
                     self.__tela = Tela.TROCA_DE_TURNO
                     self.__interface_jogador.passar_turno()
-
-                elif self.__carta_selecionada is not None:
-                    if (
-                        225 <= mouse_x <= 375
-                       ) and 80 <= mouse_y <= 140\
-                         and self.__tela == Tela.JOGO:
-                        if (self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno).possui_recurso_pra_carta(self.__carta_selecionada)):
-                            self.__cenario.efetua_acao_da_carta(self.__carta_selecionada, self.__cenario.obtem_castelo_jogador(self.__cenario.jogador_em_turno))
-                            self.__tela = Tela.TROCA_DE_TURNO
-                            self.__interface_jogador.passar_turno()
-                        else:
-                            messagebox(
-                                "Erro",
-                                "Recursos insuficientes.",
-                            )
                 else:
                     self.__tela = Tela.JOGO
 
@@ -498,7 +484,7 @@ def desenha_zona_de_jogo(screen: pygame.Surface, font: pygame.font.Font):
     if (
         (225)
         <= mouse_x
-        <= (375)
+        <= (225 + (jogar_texto.get_width() / 1.2))
     ) and 80 <= mouse_y <= 80 + 60:
 
         pygame.draw.rect(
