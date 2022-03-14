@@ -200,6 +200,7 @@ class Cenario:
         encerrar_partida = self.avalia_encerramento_partida()
         if encerrar_partida:
             self.anuncia_vencedor()
+            self.finaliza_partida()
         else:
             jogador_em_turno_eh_vermelho = (
                 self.__jogador_em_turno is self.__jogador_vermelho
