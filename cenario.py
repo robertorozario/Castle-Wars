@@ -236,11 +236,11 @@ class Cenario:
         """Inicia o jogo se os jogadores estiverem prontos."""
         jogadores_prontos = self.jogadores_estao_prontos()
         if jogadores_prontos:
-            self.__partida_em_andamento = True
             self.__castelo_azul.aplica_configuracao_inicial()
             self.__castelo_vermelho.aplica_configuracao_inicial()
             self.__jogador_azul.obtem_mao_jogador()
             self.__jogador_vermelho.obtem_mao_jogador()
+            self.__partida_em_andamento = True
 
     def jogadores_estao_prontos(self) -> bool:
         """Verifica se ambos jogadores estão prontos para começar partida."""
