@@ -250,7 +250,7 @@ class Cenario:
         """Verifica se ambos jogadores estão prontos para começar partida."""
         return self.__jogador_azul.pronto and self.__jogador_vermelho.pronto
 
-    def avalia_encerramento_partida(self):
+    def avalia_encerramento_partida(self) -> bool:
         """Avalia o encerramento da partida verificando se existe um castelo
         e jogador vencedor.
         """
@@ -259,8 +259,11 @@ class Cenario:
         nivel_azul = self.__castelo_azul.nivel
         if nivel_vermelho == 100 or nivel_azul == 0:
             self.__jogador_vermelho.vencedor = True
+            return True
         elif nivel_azul == 100 or nivel_vermelho == 0:
             self.__jogador_azul.vencedor = True
+            return True
+        return False
 
     def draw(self, surface: pygame.Surface):
         pass
