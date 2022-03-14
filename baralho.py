@@ -39,6 +39,41 @@ class Baralho:
     def nome(self) -> str:
         return self.__nome
 
+    def adiciona_carta(self, acao: AcaoCarta, copias: int):
+        """Adiciona cartas ao baralho.
+
+        Parameters
+        ----------
+        acao : AcaoCarta
+            Tipo de ação da carta para adicionar.
+        copias : int
+            Quantidade de cópias da carta para adicionar.
+        """
+        cartas_a_adicionar = []
+        if acao is AcaoCarta.TOWER:
+            cartas_a_adicionar = [CartaTower() for i in range(copias)]
+        elif acao is AcaoCarta.FIRE_ARCHER:
+            cartas_a_adicionar = [CartaFireArcher() for i in range(copias)]
+        elif acao is AcaoCarta.KNIGHT:
+            cartas_a_adicionar = [CartaKnight() for i in range(copias)]
+        elif acao is AcaoCarta.RECRUIT:
+            cartas_a_adicionar = [CartaRecruit() for i in range(copias)]
+        elif acao is AcaoCarta.BUILDER:
+            cartas_a_adicionar = [CartaBuilder() for i in range(copias)]
+        elif acao is AcaoCarta.TAVERN:
+            cartas_a_adicionar = [CartaTavern() for i in range(copias)]
+        elif acao is AcaoCarta.MAGE:
+            cartas_a_adicionar = [CartaMage() for i in range(copias)]
+        elif acao is AcaoCarta.ADD_BRICK:
+            cartas_a_adicionar = [CartaAddBrick() for i in range(copias)]
+        elif acao is AcaoCarta.ADD_WEAPON:
+            cartas_a_adicionar = [CartaAddWeapon() for i in range(copias)]
+        elif acao is AcaoCarta.MAGIC_DEFENSE:
+            cartas_a_adicionar = [CartaMagicDefense() for i in range(copias)]
+
+        for carta in cartas_a_adicionar:
+            self.__cartas.append(carta)
+
     def copia(self):
         """Faz uma cópia exato do baralho no estado atual.
 
