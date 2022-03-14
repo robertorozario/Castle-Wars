@@ -446,10 +446,10 @@ class JanelaDeJogo:
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 # Botão do mouse foi solto, seleciona carta ou ativa botões
-                self._seleciona_cartas()
+                self._seleciona_cartas(mouse_rect)
 
                 if self._clicou_em_passar_tuno(mouse_x, mouse_y):
-                    self._passa_turno(self)
+                    self._passa_turno()
 
                 elif self.__carta_selecionada is not None:
                     if self._clicou_em_jogar_carta(mouse_x, mouse_y):
