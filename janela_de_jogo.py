@@ -458,6 +458,7 @@ class JanelaDeJogo:
                        ) and 80 <= mouse_y <= 140\
                          and self.__tela == Tela.JOGO:
                         self.__cenario.jogador_em_turno.descartar_carta(self.__carta_selecionada)
+                        self.__hand_group.remove(self.__carta_selecionada)
                         self.__carta_selecionada = None
                         if self.__cenario.jogador_em_turno.descartou_max_cartas():
                             self.__tela = Tela.TROCA_DE_TURNO

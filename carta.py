@@ -267,7 +267,7 @@ class CartaMagicDefense(Carta):
     def __init__(self):
         super().__init__(
             acao=AcaoCarta.MAGIC_DEFENSE,
-            cristais=15,
+            cristais=10,
             espadas=0,
             tijolos=0,
             descricao="Ativa o buff escudo mágico, impedindo o próximo ataque.",

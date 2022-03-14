@@ -167,10 +167,16 @@ class Cenario:
             castelo_jogador.nivel += 10
         elif carta.acao is AcaoCarta.FIRE_ARCHER:
             # Causa 5 de dano ao adversário.
-            castelo_adversario.nivel -= 5
+            if castelo_adversario.escudo_magico_buff:
+                castelo_adversario.escudo_magico_buff = False
+            else:
+                castelo_adversario.nivel -= 5
         elif carta.acao is AcaoCarta.KNIGHT:
             # Causa 12 de dano ao adversário.
-            castelo_adversario.nivel -= 12
+            if castelo_adversario.escudo_magico_buff:
+                castelo_adversario.escudo_magico_buff = False
+            else:
+                castelo_adversario.nivel -= 12
         elif carta.acao is AcaoCarta.RECRUIT:
             # Aumenta 1 soldado.
             castelo_jogador.soldados += 1
